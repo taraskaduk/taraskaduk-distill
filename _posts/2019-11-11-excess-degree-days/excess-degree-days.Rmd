@@ -1,0 +1,172 @@
+---
+title: "Measuring Excess Degree-Days in the Context of Location Comfort and Liveability"
+description: Calcualting deviations (excess heat and  excess cold) from an established temperature baseline as area under the temperature curve via integral calculus and expressing such measure as Excess Degree-Days, or EDD.
+slug: excess-degree-days
+author:
+  - name: Taras Kaduk
+    url: https://taraskaduk.com
+date: 11-11-2019
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 2
+bibliography: bibliography.bib
+---
+
+```{r include=FALSE}
+library(tweetrmd)
+library(rmarkdown)
+library(tidyverse)
+```
+ 
+## Introduction
+Characterization of daily air temperature as it relates to human comfort and conditions optimal for survival has many solutions. On the one hand, the mean daily, monthly, and annual air temperatures convey the necessary information with one number. However, as it is the case with many measures of central tendency, mean temperature loses a lot of important information, such as minimum and maximum values, and the range. On the other hand, minimum and maximum values inform the public of the temperature on a given day, but don’t communicate the extremity of said temperature readings well enough. Additionally, both daily min and max values, when aggregated to average minimums and average maximums, become more abstract.
+
+Finally, a measure that is being used more frequently in recent years and is designed to communicate the dangers of climate change is the amount of days with temperature above a certain threshold. For instance, in the articles published in the United States, “days with temperature above 90°F/95°F” is frequently used [@plumer_95-degree_2017] [@climate_impact_lab_estimating_2018] [@livingston_washington_nodate]. Such indicator serves its purpose relatively well, but it loses the complexity of temperature variation and extremes and potentially evens out places with different weather and temperature readings.
+ 
+On the other hand, there exist indexes and calculations that reflect the weather (and temperature in particular) not in degrees or in days when a certain condition is met, but in degree-hours or degree-days, quantifying the exposure to heat energy over time. While methodologies vary based on the domain and task at hand, the key idea is to present the difference between an established baseline and actual temperature readings as area, and then to quantify that area [@thom_seasonal_1952].^[I was not aware of such computations until after writing out the logic of it. I came up with the idea independently while looking into weather patterns across U.S. cities, while simultaneously auditing a Calc III class for a refresher. My understanding is that it is best practice to cite similar research even if it was not used in researching or writing the paper.]
+
+While a lot of applications of degree-hours and degree-days seem to be focused in pest control [@zalom_degree_1983], forensics [@megyesi_using_2005], and vegetation research, some use of such calculations has been applied to humans [@lin_effects_2019]. I propose to use this approach as an alternative approach in evaluating the exposure to excess heat and excess cold in excess heat degree-days, excess cold degree days, and total excess degree-days, where the baseline can be set as temperature optimal for human habitation, and the actual temperature curve is presented as a sine and is calculated from minimum and maximum readings for a given day. Then, quantifying excess heat, cold, and total degree-days can be accomplished with integral calculus as finding the area under the curve.
+ 
+ 
+## Methodology
+For the purposes of this analysis, several assumptions and simplifications must be made. The daily temperature is assumed to follow a sinusoidal curve from its minimum value to its maximum value and back.^[This assumption only requires 2 data inputs (min and max daily temperature) instead of continuous temperature reading.] More specifically, the daily temperature curve is modeled as a cosine function, with the minimum temperature assumed at midnight and maximum temperature at noon:^[This assumption helps us in modeling the curve without any additional inputs, while a more precise approach would require sunrise, sunset, and solar noon times for each day [@chow_new_2007]]
+
+$$f(\theta) = -a \cdot cos(b\theta) + d = -\frac{({t_{max}} - {t_{min}})}{2}\cdot cos(\frac{\pi}{12}\theta) + t_{min} + \frac{(t_{max}-t_{min})}{2}$$
+
+The baseline temperature from which the excess degree-days is calculated is assumed at 18°C, which is a mid-point between a slightly colder temperature optimal for sleep, and a slightly warmer temperature optimal for daytime activity. It needs to be pointed out that such baseline is not entirely objective, as there is no agreement on what the optimal temperature for humans is, as well as there is no consideration given to most other parameters that impact the perception of outdoor air temperature: sunlight exposure, wind, precipitation etc.
+ 
+To sum up, 18°C is the baseline, and any deviation up or down from which will make a human experience of outside temperature less favorable. Along the same lines, any deviation from 18°C up or down will also make humans rely on other advances of civilization: clothing, indoor insulation, heating, air conditioning, more clothing layers, more heating etc. Thus, the higher the excess degree-days reading, the less livable the place is, or the more reliant the place is on things like air conditioning or central heating.
+ 
+### Excess Degree-Hours and Excess Degree-Days Calculation
+
+The calculation of Excess Degree-Hours (or $EDH$ for short) for the general case where the temperature curve crosses the baseline two times on a given day can be notated as:
+
+$$EDH = \int_{0}^{\theta_1} (g(\theta) - f(\theta)) d\theta + \int_{\theta_1}^{\theta_2} (f(\theta) - g(\theta)) d\theta + \int_{\theta_2}^{24} (g(\theta) - f(\theta)) d\theta$$
+
+where \(\theta\) is time, \(f(\theta)\) is our cosine function, \(g(\theta) = 18°C\) (the baseline), and \(\theta_1\) and \(\theta_2\) are the times at which the temperature curve crosses the baseline.
+
+![](integral.png)
+
+The area above the baseline stands for excess heat degree-days, and the area below the baseline - for excess cold degree-days. The sum of absolute values of both hot and cold areas will represent the total excess degree-days.
+
+The cases when the curve stays completely above or below the baseline are special cases that require only one of the three integrals.
+
+To get Excess Degree-Days ($EDD$), the $EDH$ needs to be divided by 24: $$ EDD = \frac{EDH}{24}$$
+
+### Calculation examples
+
+To demonstrate the way this measure works, I will use 3 cities - Los Angeles, Miami, Minneapolis - at 2 specific dates: Feb 1 and Jul 1 of 2018.
+
+Given the min and max temperature values for each city for both days, we can model the temperature curves:
+
+![](1.png)
+
+We can then proceed with calculating the area under each curve:
+
+![](2.png)
+
+Looking more broadly at full year 2018, we can visualize the cumulative excess degree-hours:
+
+![](3.gif)
+ 
+## Results
+
+This article sets a theoretical basis for further practical applications. It provides another tool in the toolbox of data analysis as it relates to climate change, weather, urban comfort and livability.
+
+My plan is to build on this work in the future, but given the time constraints, this may happen at some time in the future. Until then, I am hoping this approach will be useful to other researchers.
+
+### U.S. CBSAs ranked by excess degree-days
+
+One quick demonstration of the EDD calculation can be done with displaying the EDD for the United States CBSAs. I will use the data from another project I've been working on: ^[https://taraskaduk.com/2019/02/18/weather/ for the write-up of the methodology, and https://github.com/taraskaduk/place-to-live for the data and the R code to obtain the data]
+
+```{r echo=FALSE, layout="l-body-outset"}
+locations <- readRDS("summary_edd.RDS") %>% 
+  select(cbsafp, city, edd_total, edd_cold, edd_hot) %>%
+  mutate(edd_total = round(edd_total,2), 
+         edd_cold = round(edd_cold,2), 
+         edd_hot = round(edd_hot,2)) %>% 
+  arrange(edd_total)
+paged_table(locations)
+```
+
+The way these figures are represented spatially can be visualized as follows:
+
+```{r echo=FALSE, layout="l-body-outset"}
+knitr::include_graphics("edd_heat.png")
+knitr::include_graphics("edd_cold.png")
+knitr::include_graphics("edd_total.png")
+```
+
+
+## Notes {.appendix}
+
+Initial tweet shortly after I came up with the calculation idea following looking at weather data and solving integral equations:
+
+```{r echo=FALSE}
+tweet_embed("https://twitter.com/taraskaduk/status/1123928248432451589")
+```
+
+
+## R code for EDD {.appendix}
+
+Here is the R function to obtain the area between the temperature curve and the baseline. This function can be used in a data frame (adhering to the tidy data analysis framework) and applied with a `purrr::map2_dbl()` call inside a `mutate()` call.
+
+```{r eval=FALSE, include=TRUE, echo=TRUE}
+
+require(tibble)
+
+get_edd <- function(min, max, baseline = 18) {
+  
+  # First, create the temp. function:
+  a <- (max-min)/2 #amplitude
+  period <- 24
+  b <- 2 * pi / period
+  d <- min + a
+  
+  # This is our temperature function:
+  temperature <- function(x) {
+    -a * cos(b * x) + d
+  }
+  
+  
+  # 3 calculations based on the 3 scenarios
+  # of how the curve and the baseline interact
+  
+  if (min >= baseline) {
+    # integral <- -a*sin(24*b) + 24*d - 24*baseline
+    integral <- integrate(temperature, 0, 24)$value - baseline * 24 %>% 
+      round(2)
+    edd <- tibble( edd_hot = round(integral/24,2),  
+                   edd_cold = 0, 
+                   edd_total = round(integral/24,2))
+    
+  } else if (max <= baseline) {
+    integral <- baseline * 24 - integrate(temperature, 0, 24)$value %>% 
+      round(2)
+    
+    edd <- tibble( edd_hot = 0,  
+                   edd_cold = round(integral/24,2), 
+                   edd_total = round(integral/24,2))
+    
+  } else {
+    intercept1 <- acos((d - baseline) / a) / b
+    intercept2 <- (12 - intercept1) * 2 + intercept1
+    
+    integral1 <-
+      baseline * intercept1 - integrate(temperature, 0, intercept1)$value
+    
+    integral2 <-
+      integrate(temperature, intercept1, intercept2)$value - baseline * (intercept2 - intercept1) 
+    
+    integral3 <-
+      baseline * (24 - intercept2) - integrate(temperature, intercept2, 24)$value 
+    
+    edd <- tibble(edd_hot = round(integral2/24,2),  
+                   edd_cold = round((integral1 + integral3)/24,2), 
+                   edd_total = round((integral1 + integral2 + integral3)/24,2))
+  }
+  return(edd)
+}
+```

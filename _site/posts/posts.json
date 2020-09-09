@@ -1,0 +1,74 @@
+[
+  {
+    "path": "posts/2019-11-11-excess-degree-days/",
+    "title": "Measuring Excess Degree-Days in the Context of Location Comfort and Liveability",
+    "description": "Calcualting deviations (excess heat and  excess cold) from an established temperature baseline as area under the temperature curve via integral calculus and expressing such measure as Excess Degree-Days, or EDD.",
+    "author": [
+      {
+        "name": "Taras Kaduk",
+        "url": "https://taraskaduk.com"
+      }
+    ],
+    "date": "2019-11-11",
+    "categories": [],
+    "preview": "posts/2019-11-11-excess-degree-days/edd_heat.png",
+    "last_modified": "2020-09-09T15:53:19-04:00",
+    "input_file": {},
+    "preview_width": 2700,
+    "preview_height": 2100
+  },
+  {
+    "path": "posts/2019-02-18-weather/",
+    "title": "Where are the places with the best (and the worst) weather in the United States?",
+    "description": "Using NOAA GSOD data in determining the amount of pleasant days in USA's core-based statistical areas",
+    "author": [
+      {
+        "name": "Taras Kaduk",
+        "url": "https://taraskaduk.com"
+      }
+    ],
+    "date": "2019-02-18",
+    "categories": [],
+    "preview": "posts/2019-02-18-weather/map.png",
+    "last_modified": "2020-09-09T15:55:56-04:00",
+    "input_file": {},
+    "preview_width": 3600,
+    "preview_height": 2400
+  },
+  {
+    "path": "posts/2017-11-26-pixel-maps/",
+    "title": "Create World Pixel Maps in R",
+    "description": "A walk-through of generating personalized pixel maps with R from scratch.",
+    "author": [
+      {
+        "name": "Taras Kaduk",
+        "url": "https://taraskaduk.com"
+      }
+    ],
+    "date": "2017-11-26",
+    "categories": [],
+    "preview": "posts/2017-11-26-pixel-maps/pixel-maps_files/figure-html5/plot-1.png",
+    "last_modified": "2020-09-07T22:10:41-04:00",
+    "input_file": {},
+    "preview_width": 3840,
+    "preview_height": 1920
+  },
+  {
+    "path": "posts/2017-09-30-mpaa/",
+    "title": "Do MPAA movie ratings mean anything?",
+    "description": "Investigating the movie ratings and and their content. With R.",
+    "author": [
+      {
+        "name": "Taras Kaduk",
+        "url": "https://taraskaduk.com"
+      }
+    ],
+    "date": "2017-09-30",
+    "categories": [],
+    "preview": "posts/2017-09-30-mpaa/mpaa_files/figure-html5/unnamed-chunk-2-1.png",
+    "last_modified": "2020-09-07T22:09:17-04:00",
+    "input_file": {},
+    "preview_width": 1248,
+    "preview_height": 768
+  }
+]

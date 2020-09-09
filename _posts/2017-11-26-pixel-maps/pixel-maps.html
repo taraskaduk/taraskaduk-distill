@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+  <meta name="generator" content="distill" />
+
+  <style type="text/css">
+  /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
+  body {
+    visibility: hidden;
+  }
+  </style>
+
+ <!--radix_placeholder_import_source-->
+ <!--/radix_placeholder_import_source-->
+
+  <!--radix_placeholder_meta_tags-->
+  <title>Create World Pixel Maps in R</title>
+  
+  <meta property="description" itemprop="description" content="A walk-through of generating personalized pixel maps with R from scratch."/>
+  
+  
+  <!--  https://schema.org/Article -->
+  <meta property="article:published" itemprop="datePublished" content="2017-11-26"/>
+  <meta property="article:created" itemprop="dateCreated" content="2017-11-26"/>
+  <meta name="article:author" content="Taras Kaduk"/>
+  
+  <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
+  <meta property="og:title" content="Create World Pixel Maps in R"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="A walk-through of generating personalized pixel maps with R from scratch."/>
+  <meta property="og:locale" content="en_US"/>
+  
+  <!--  https://dev.twitter.com/cards/types/summary -->
+  <meta property="twitter:card" content="summary"/>
+  <meta property="twitter:title" content="Create World Pixel Maps in R"/>
+  <meta property="twitter:description" content="A walk-through of generating personalized pixel maps with R from scratch."/>
+  
+  <!--/radix_placeholder_meta_tags-->
+  <!--radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-rmarkdown-metadata">
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Create World Pixel Maps in R"]},{"type":"character","attributes":{},"value":["A walk-through of generating personalized pixel maps with R from scratch.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Taras Kaduk"]},{"type":"character","attributes":{},"value":["https://taraskaduk.com"]}]}]},{"type":"character","attributes":{},"value":["2017-11-26"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
+  </script>
+  <!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["locations.csv","pixel-maps_files/bowser-1.9.3/bowser.min.js","pixel-maps_files/distill-2.2.21/template.v2.js","pixel-maps_files/figure-html5/header-1.png","pixel-maps_files/figure-html5/plot-1.png","pixel-maps_files/jquery-1.11.3/jquery.min.js","pixel-maps_files/pagedtable-1.1/css/pagedtable.css","pixel-maps_files/pagedtable-1.1/js/pagedtable.js","pixel-maps_files/webcomponents-2.0.0/webcomponents.js"]}
+  </script>
+  <!--radix_placeholder_navigation_in_header-->
+  <!--/radix_placeholder_navigation_in_header-->
+  <!--radix_placeholder_distill-->
+  
+  <style type="text/css">
+  
+  body {
+    background-color: white;
+  }
+  
+  .pandoc-table {
+    width: 100%;
+  }
+  
+  .pandoc-table>caption {
+    margin-bottom: 10px;
+  }
+  
+  .pandoc-table th:not([align]) {
+    text-align: left;
+  }
+  
+  .pagedtable-footer {
+    font-size: 15px;
+  }
+  
+  .html-widget {
+    margin-bottom: 2.0em;
+  }
+  
+  .l-screen-inset {
+    padding-right: 16px;
+  }
+  
+  .l-screen .caption {
+    margin-left: 10px;
+  }
+  
+  .shaded {
+    background: rgb(247, 247, 247);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .shaded .html-widget {
+    margin-bottom: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .shaded .shaded-content {
+    background: white;
+  }
+  
+  .text-output {
+    margin-top: 0;
+    line-height: 1.5em;
+  }
+  
+  .hidden {
+    display: none !important;
+  }
+  
+  d-article {
+    padding-bottom: 30px;
+  }
+  
+  d-appendix {
+    padding-top: 30px;
+  }
+  
+  d-article>p>img {
+    width: 100%;
+  }
+  
+  d-article iframe {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 2.0em;
+    width: 100%;
+  }
+  
+  figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+  
+  /* CSS for table of contents */
+  
+  .d-toc {
+    color: rgba(0,0,0,0.8);
+    font-size: 0.8em;
+    line-height: 1em;
+  }
+  
+  .d-toc-header {
+    font-size: 0.6rem;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.5);
+    text-transform: uppercase;
+    margin-top: 0;
+    margin-bottom: 1.3em;
+  }
+  
+  .d-toc a {
+    border-bottom: none;
+  }
+  
+  .d-toc ul {
+    padding-left: 0;
+  }
+  
+  .d-toc li>ul {
+    padding-top: 0.8em;
+    padding-left: 16px;
+    margin-bottom: 0.6em;
+  }
+  
+  .d-toc ul,
+  .d-toc li {
+    list-style-type: none;
+  }
+  
+  .d-toc li {
+    margin-bottom: 0.9em;
+  }
+  
+  .d-toc-separator {
+    margin-top: 20px;
+    margin-bottom: 2em;
+  }
+  
+  .d-article-with-toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  
+  
+  
+  /* Tweak code blocks (note that this CSS is repeated above in an injection
+     into the d-code shadow dom) */
+  
+  d-code {
+    overflow-x: auto !important;
+  }
+  
+  pre.d-code code.d-code {
+    padding-left: 10px;
+    font-size: 12px;
+    border-left: 2px solid rgba(0,0,0,0.1);
+  }
+  
+  pre.text-output {
+  
+    font-size: 12px;
+    color: black;
+    background: none;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+  
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+  
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+  
+  @media(min-width: 768px) {
+  
+  d-code {
+    overflow-x: visible !important;
+  }
+  
+  pre.d-code code.d-code  {
+      padding-left: 18px;
+      font-size: 14px;
+  }
+  pre.text-output {
+    font-size: 14px;
+  }
+  }
+  
+  /* Figure */
+  
+  .figure {
+    position: relative;
+    margin-bottom: 2.5em;
+    margin-top: 1.5em;
+  }
+  
+  .figure img {
+    width: 100%;
+  }
+  
+  .figure .caption {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 12px;
+    line-height: 1.5em;
+  }
+  
+  .figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+  
+  .figure .caption a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+  
+  .figure .caption b,
+  .figure .caption strong, {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 1.0);
+  }
+  
+  /* Citations */
+  
+  d-article .citation {
+    color: inherit;
+    cursor: inherit;
+  }
+  
+  div.hanging-indent{
+    margin-left: 1em; text-indent: -1em;
+  }
+  
+  
+  /* Tweak 1000px media break to show more text */
+  
+  @media(min-width: 1000px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 16px;
+    }
+  
+    .grid {
+      grid-column-gap: 16px;
+    }
+  
+    d-article {
+      font-size: 1.06rem;
+      line-height: 1.7em;
+    }
+    figure .caption, .figure .caption, figure figcaption {
+      font-size: 13px;
+    }
+  }
+  
+  @media(min-width: 1180px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 32px;
+    }
+  
+    .grid {
+      grid-column-gap: 32px;
+    }
+  }
+  
+  
+  /* Get the citation styles for the appendix (not auto-injected on render since
+     we do our own rendering of the citation appendix) */
+  
+  d-appendix .citation-appendix,
+  .d-appendix .citation-appendix {
+    font-size: 11px;
+    line-height: 15px;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    padding-left: 18px;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.02);
+    padding: 10px 18px;
+    border-radius: 3px;
+    color: rgba(150, 150, 150, 1);
+    overflow: hidden;
+    margin-top: -12px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  
+  
+  /* Social footer */
+  
+  .social_footer {
+    margin-top: 30px;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.67);
+  }
+  
+  .disqus-comments {
+    margin-right: 30px;
+  }
+  
+  .disqus-comment-count {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+  }
+  
+  #disqus_thread {
+    margin-top: 30px;
+  }
+  
+  .article-sharing a {
+    border-bottom: none;
+    margin-right: 8px;
+  }
+  
+  .article-sharing a:hover {
+    border-bottom: none;
+  }
+  
+  .sidebar-section.subscribe {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+  
+  .subscribe p {
+    margin-bottom: 0.5em;
+  }
+  
+  
+  .article-footer .subscribe {
+    font-size: 15px;
+    margin-top: 45px;
+  }
+  
+  
+  .sidebar-section.custom {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+  
+  .custom p {
+    margin-bottom: 0.5em;
+  }
+  
+  
+  /* Improve display for browsers without grid (IE/Edge <= 15) */
+  
+  .downlevel {
+    line-height: 1.6em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+  }
+  
+  .downlevel .d-title {
+    padding-top: 6rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  .downlevel .d-title h1 {
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 1.1em;
+    margin: 0 0 0.5rem;
+  }
+  
+  .downlevel .d-title p {
+    font-weight: 300;
+    font-size: 1.2rem;
+    line-height: 1.55em;
+    margin-top: 0;
+  }
+  
+  .downlevel .d-byline {
+    padding-top: 0.8em;
+    padding-bottom: 0.8em;
+    font-size: 0.8rem;
+    line-height: 1.8em;
+  }
+  
+  .downlevel .section-separator {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .downlevel .d-article {
+    font-size: 1.06rem;
+    line-height: 1.7em;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+  
+  
+  .downlevel .d-appendix {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: none;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.5);
+    padding-top: 40px;
+    padding-bottom: 48px;
+  }
+  
+  .downlevel .footnotes ol {
+    padding-left: 13px;
+  }
+  
+  .downlevel .base-grid,
+  .downlevel .distill-header,
+  .downlevel .d-title,
+  .downlevel .d-abstract,
+  .downlevel .d-article,
+  .downlevel .d-appendix,
+  .downlevel .distill-appendix,
+  .downlevel .d-byline,
+  .downlevel .d-footnote-list,
+  .downlevel .d-citation-list,
+  .downlevel .distill-footer,
+  .downlevel .appendix-bottom,
+  .downlevel .posts-container {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  
+  @media(min-width: 768px) {
+    .downlevel .base-grid,
+    .downlevel .distill-header,
+    .downlevel .d-title,
+    .downlevel .d-abstract,
+    .downlevel .d-article,
+    .downlevel .d-appendix,
+    .downlevel .distill-appendix,
+    .downlevel .d-byline,
+    .downlevel .d-footnote-list,
+    .downlevel .d-citation-list,
+    .downlevel .distill-footer,
+    .downlevel .appendix-bottom,
+    .downlevel .posts-container {
+    padding-left: 150px;
+    padding-right: 150px;
+    max-width: 900px;
+  }
+  }
+  
+  .downlevel pre code {
+    display: block;
+    border-left: 2px solid rgba(0, 0, 0, .1);
+    padding: 0 0 0 20px;
+    font-size: 14px;
+  }
+  
+  .downlevel code, .downlevel pre {
+    color: black;
+    background: none;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+  
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+  
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+  
+  </style>
+  
+  <script type="application/javascript">
+  
+  function is_downlevel_browser() {
+    if (bowser.isUnsupportedBrowser({ msie: "12", msedge: "16"},
+                                   window.navigator.userAgent)) {
+      return true;
+    } else {
+      return window.load_distill_framework === undefined;
+    }
+  }
+  
+  // show body when load is complete
+  function on_load_complete() {
+  
+    // set body to visible
+    document.body.style.visibility = 'visible';
+  
+    // force redraw for leaflet widgets
+    if (window.HTMLWidgets) {
+      var maps = window.HTMLWidgets.findAll(".leaflet");
+      $.each(maps, function(i, el) {
+        var map = this.getMap();
+        map.invalidateSize();
+        map.eachLayer(function(layer) {
+          if (layer instanceof L.TileLayer)
+            layer.redraw();
+        });
+      });
+    }
+  
+    // trigger 'shown' so htmlwidgets resize
+    $('d-article').trigger('shown');
+  }
+  
+  function init_distill() {
+  
+    init_common();
+  
+    // create front matter
+    var front_matter = $('<d-front-matter></d-front-matter>');
+    $('#distill-front-matter').wrap(front_matter);
+  
+    // create d-title
+    $('.d-title').changeElementType('d-title');
+  
+    // create d-byline
+    var byline = $('<d-byline></d-byline>');
+    $('.d-byline').replaceWith(byline);
+  
+    // create d-article
+    var article = $('<d-article></d-article>');
+    $('.d-article').wrap(article).children().unwrap();
+  
+    // move posts container into article
+    $('.posts-container').appendTo($('d-article'));
+  
+    // create d-appendix
+    $('.d-appendix').changeElementType('d-appendix');
+  
+    // flag indicating that we have appendix items
+    var appendix = $('.appendix-bottom').children('h3').length > 0;
+  
+    // replace footnotes with <d-footnote>
+    $('.footnote-ref').each(function(i, val) {
+      appendix = true;
+      var href = $(this).attr('href');
+      var id = href.replace('#', '');
+      var fn = $('#' + id);
+      var fn_p = $('#' + id + '>p');
+      fn_p.find('.footnote-back').remove();
+      var text = fn_p.html();
+      var dtfn = $('<d-footnote></d-footnote>');
+      dtfn.html(text);
+      $(this).replaceWith(dtfn);
+    });
+    // remove footnotes
+    $('.footnotes').remove();
+  
+    // move refs into #references-listing
+    $('#references-listing').replaceWith($('#refs'));
+  
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      var id = $(this).attr('id');
+      $('.d-toc a[href="#' + id + '"]').parent().remove();
+      appendix = true;
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('d-appendix'));
+    });
+  
+    // show d-appendix if we have appendix content
+    $("d-appendix").css('display', appendix ? 'grid' : 'none');
+  
+    // replace code blocks with d-code
+    $('pre>code').each(function(i, val) {
+      var code = $(this);
+      var pre = code.parent();
+      var clz = "";
+      var language = pre.attr('class');
+      if (language) {
+        // map unknown languages to "clike" (without this they just dissapear)
+        if ($.inArray(language, ["bash", "clike", "css", "go", "html",
+                                 "javascript", "js", "julia", "lua", "markdown",
+                                 "markup", "mathml", "python", "svg", "xml"]) == -1)
+          language = "clike";
+        language = ' language="' + language + '"';
+        var dt_code = $('<d-code block' + language + clz + '></d-code>');
+        dt_code.text(code.text());
+        pre.replaceWith(dt_code);
+      } else {
+        code.addClass('text-output').unwrap().changeElementType('pre');
+      }
+    });
+  
+    // localize layout chunks to just output
+    $('.layout-chunk').each(function(i, val) {
+  
+      // capture layout
+      var layout = $(this).attr('data-layout');
+  
+      // apply layout to markdown level block elements
+      var elements = $(this).children().not('d-code, pre.text-output, script');
+      elements.each(function(i, el) {
+        var layout_div = $('<div class="' + layout + '"></div>');
+        if (layout_div.hasClass('shaded')) {
+          var shaded_content = $('<div class="shaded-content"></div>');
+          $(this).wrap(shaded_content);
+          $(this).parent().wrap(layout_div);
+        } else {
+          $(this).wrap(layout_div);
+        }
+      });
+  
+  
+      // unwrap the layout-chunk div
+      $(this).children().unwrap();
+    });
+  
+    // load distill framework
+    load_distill_framework();
+  
+    // wait for window.distillRunlevel == 4 to do post processing
+    function distill_post_process() {
+  
+      if (!window.distillRunlevel || window.distillRunlevel < 4)
+        return;
+  
+      // hide author/affiliations entirely if we have no authors
+      var front_matter = JSON.parse($("#distill-front-matter").html());
+      var have_authors = front_matter.authors && front_matter.authors.length > 0;
+      if (!have_authors)
+        $('d-byline').addClass('hidden');
+  
+      // table of contents
+      if (have_authors) // adjust border if we are in authors
+        $('.d-toc').parent().addClass('d-article-with-toc');
+  
+      // strip links that point to #
+      $('.authors-affiliations').find('a[href="#"]').removeAttr('href');
+  
+      // hide elements of author/affiliations grid that have no value
+      function hide_byline_column(caption) {
+        $('d-byline').find('h3:contains("' + caption + '")').parent().css('visibility', 'hidden');
+      }
+  
+      // affiliations
+      var have_affiliations = false;
+      for (var i = 0; i<front_matter.authors.length; ++i) {
+        var author = front_matter.authors[i];
+        if (author.affiliation !== "&nbsp;") {
+          have_affiliations = true;
+          break;
+        }
+      }
+      if (!have_affiliations)
+        $('d-byline').find('h3:contains("Affiliations")').css('visibility', 'hidden');
+  
+      // published date
+      if (!front_matter.publishedDate)
+        hide_byline_column("Published");
+  
+      // document object identifier
+      var doi = $('d-byline').find('h3:contains("DOI")');
+      var doi_p = doi.next().empty();
+      if (!front_matter.doi) {
+        // if we have a citation and valid citationText then link to that
+        if ($('#citation').length > 0 && front_matter.citationText) {
+          doi.html('Citation');
+          $('<a href="#citation"></a>')
+            .text(front_matter.citationText)
+            .appendTo(doi_p);
+        } else {
+          hide_byline_column("DOI");
+        }
+      } else {
+        $('<a></a>')
+           .attr('href', "https://doi.org/" + front_matter.doi)
+           .html(front_matter.doi)
+           .appendTo(doi_p);
+      }
+  
+       // change plural form of authors/affiliations
+      if (front_matter.authors.length === 1) {
+        var grid = $('.authors-affiliations');
+        grid.children('h3:contains("Authors")').text('Author');
+        grid.children('h3:contains("Affiliations")').text('Affiliation');
+      }
+  
+      // inject pre code styles (can't do this with a global stylesheet b/c a shadow root is used)
+      $('d-code').each(function(i, val) {
+        var style = document.createElement('style');
+        style.innerHTML = 'pre code { padding-left: 10px; font-size: 12px; border-left: 2px solid rgba(0,0,0,0.1); } ' +
+                          '@media(min-width: 768px) { pre code { padding-left: 18px; font-size: 14px; } }';
+        if (this.shadowRoot)
+          this.shadowRoot.appendChild(style);
+      });
+  
+      // move appendix-bottom entries to the bottom
+      $('.appendix-bottom').appendTo('d-appendix').children().unwrap();
+      $('.appendix-bottom').remove();
+  
+      // clear polling timer
+      clearInterval(tid);
+  
+      // show body now that everything is ready
+      on_load_complete();
+    }
+  
+    var tid = setInterval(distill_post_process, 50);
+    distill_post_process();
+  
+  }
+  
+  function init_downlevel() {
+  
+    init_common();
+  
+     // insert hr after d-title
+    $('.d-title').after($('<hr class="section-separator"/>'));
+  
+    // check if we have authors
+    var front_matter = JSON.parse($("#distill-front-matter").html());
+    var have_authors = front_matter.authors && front_matter.authors.length > 0;
+  
+    // manage byline/border
+    if (!have_authors)
+      $('.d-byline').remove();
+    $('.d-byline').after($('<hr class="section-separator"/>'));
+    $('.d-byline a').remove();
+  
+    // remove toc
+    $('.d-toc-header').remove();
+    $('.d-toc').remove();
+    $('.d-toc-separator').remove();
+  
+    // move appendix elements
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('.d-appendix'));
+    });
+  
+  
+    // inject headers into references and footnotes
+    var refs_header = $('<h3></h3>');
+    refs_header.text('References');
+    $('#refs').prepend(refs_header);
+  
+    var footnotes_header = $('<h3></h3');
+    footnotes_header.text('Footnotes');
+    $('.footnotes').children('hr').first().replaceWith(footnotes_header);
+  
+    // move appendix-bottom entries to the bottom
+    $('.appendix-bottom').appendTo('.d-appendix').children().unwrap();
+    $('.appendix-bottom').remove();
+  
+    // remove appendix if it's empty
+    if ($('.d-appendix').children().length === 0)
+      $('.d-appendix').remove();
+  
+    // prepend separator above appendix
+    $('.d-appendix').before($('<hr class="section-separator" style="clear: both"/>'));
+  
+    // trim code
+    $('pre>code').each(function(i, val) {
+      $(this).html($.trim($(this).html()));
+    });
+  
+    // move posts-container right before article
+    $('.posts-container').insertBefore($('.d-article'));
+  
+    $('body').addClass('downlevel');
+  
+    on_load_complete();
+  }
+  
+  
+  function init_common() {
+  
+    // jquery plugin to change element types
+    (function($) {
+      $.fn.changeElementType = function(newType) {
+        var attrs = {};
+  
+        $.each(this[0].attributes, function(idx, attr) {
+          attrs[attr.nodeName] = attr.nodeValue;
+        });
+  
+        this.replaceWith(function() {
+          return $("<" + newType + "/>", attrs).append($(this).contents());
+        });
+      };
+    })(jQuery);
+  
+    // prevent underline for linked images
+    $('a > img').parent().css({'border-bottom' : 'none'});
+  
+    // mark non-body figures created by knitr chunks as 100% width
+    $('.layout-chunk').each(function(i, val) {
+      var figures = $(this).find('img, .html-widget');
+      if ($(this).attr('data-layout') !== "l-body") {
+        figures.css('width', '100%');
+      } else {
+        figures.css('max-width', '100%');
+        figures.filter("[width]").each(function(i, val) {
+          var fig = $(this);
+          fig.css('width', fig.attr('width') + 'px');
+        });
+  
+      }
+    });
+  
+    // auto-append index.html to post-preview links in file: protocol
+    // and in rstudio ide preview
+    $('.post-preview').each(function(i, val) {
+      if (window.location.protocol === "file:")
+        $(this).attr('href', $(this).attr('href') + "index.html");
+    });
+  
+    // get rid of index.html references in header
+    if (window.location.protocol !== "file:") {
+      $('.distill-site-header a[href]').each(function(i,val) {
+        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+      });
+    }
+  
+    // add class to pandoc style tables
+    $('tr.header').parent('thead').parent('table').addClass('pandoc-table');
+    $('.kable-table').children('table').addClass('pandoc-table');
+  
+    // add figcaption style to table captions
+    $('caption').parent('table').addClass("figcaption");
+  
+    // initialize posts list
+    if (window.init_posts_list)
+      window.init_posts_list();
+  
+    // implmement disqus comment link
+    $('.disqus-comment-count').click(function() {
+      window.headroom_prevent_pin = true;
+      $('#disqus_thread').toggleClass('hidden');
+      if (!$('#disqus_thread').hasClass('hidden')) {
+        var offset = $(this).offset();
+        $(window).resize();
+        $('html, body').animate({
+          scrollTop: offset.top - 35
+        });
+      }
+    });
+  }
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    if (is_downlevel_browser())
+      init_downlevel();
+    else
+      window.addEventListener('WebComponentsReady', init_distill);
+  });
+  
+  </script>
+  
+  <!--/radix_placeholder_distill-->
+  <link href="pixel-maps_files/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+  <script src="pixel-maps_files/pagedtable-1.1/js/pagedtable.js"></script>
+  <script src="pixel-maps_files/jquery-1.11.3/jquery.min.js"></script>
+  <script src="pixel-maps_files/bowser-1.9.3/bowser.min.js"></script>
+  <script src="pixel-maps_files/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="pixel-maps_files/distill-2.2.21/template.v2.js"></script>
+  <!--radix_placeholder_site_in_header-->
+  <!--/radix_placeholder_site_in_header-->
+
+
+</head>
+
+<body>
+
+<!--radix_placeholder_front_matter-->
+
+<script id="distill-front-matter" type="text/json">
+{"title":"Create World Pixel Maps in R","description":"A walk-through of generating personalized pixel maps with R from scratch.","authors":[{"author":"Taras Kaduk","authorURL":"https://taraskaduk.com","affiliation":"&nbsp;","affiliationURL":"#"}],"publishedDate":"2017-11-26T00:00:00.000-05:00","citationText":"Kaduk, 2017"}
+</script>
+
+<!--/radix_placeholder_front_matter-->
+<!--radix_placeholder_navigation_before_body-->
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="d-title">
+<h1>Create World Pixel Maps in R</h1>
+<p><p>A walk-through of generating personalized pixel maps with R from scratch.</p></p>
+</div>
+
+<div class="d-byline">
+  Taras Kaduk <a href="https://taraskaduk.com" class="uri">https://taraskaduk.com</a> 
+  
+<br/>2017-11-26
+</div>
+
+<div class="d-article">
+<p>Today, I’m going to show you how to make pixel maps in R. Why pixel maps? Because they look awesome!</p>
+<p>I was searching on the web for a while, but couldn’t find a good tutorial. Being stubborn as I am, I eventually figured out a way to get what I want. You know, if you torture your code enough, it might give you what you need.</p>
+<h2 id="setup">Setup</h2>
+<p>The workflow here is very lightweight, and only requires <code>tidyverse</code> and <code>maps</code> to be loaded.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+library(tidyverse)
+library(maps)</code></pre>
+</div>
+<h2 id="personal-coordinates">Personal coordinates</h2>
+<p>Next, as we are trying to make this map personal, you’ll need to supply a list of data points to map: places you’ve lived, places you’ve traveled to, and so on. I will leave you to your own devices here, whether you want to do some reverse geocoding, or look coordinates up one by one is up to you. The desired outcome here is a data frame containing latitude and longitude coordinates of the places you want to map.</p>
+<div class="layout-chunk" data-layout="l-body-outset">
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["city"],"name":[1],"type":["chr"],"align":["left"]},{"label":["state"],"name":[2],"type":["chr"],"align":["left"]},{"label":["country"],"name":[3],"type":["chr"],"align":["left"]},{"label":["lat"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["lon"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["flag"],"name":[6],"type":["chr"],"align":["left"]}],"data":[{"1":"San Francisco","2":"CA","3":"United States","4":"37.75610","5":"-122.442900","6":"been"},{"1":"Atlanta","2":"GA","3":"United States","4":"33.76270","5":"-84.423100","6":"been"},{"1":"Maggie Valley","2":"NC","3":"United States","4":"35.52400","5":"-83.064300","6":"been"},{"1":"Paris","2":"NA","3":"France","4":"48.86715","5":"2.331255","6":"been"},{"1":"Denver","2":"CO","3":"United States","4":"39.76210","5":"-104.875900","6":"been"},{"1":"Enumclaw","2":"WA","3":"United States","4":"47.20180","5":"-121.989800","6":"been"},{"1":"Saint Augustine","2":"FL","3":"United States","4":"29.89790","5":"-81.310000","6":"been"},{"1":"Seattle","2":"WA","3":"United States","4":"47.62121","5":"-122.353633","6":"been"},{"1":"Orangeburg","2":"SC","3":"United States","4":"33.49280","5":"-80.867100","6":"been"},{"1":"Port Angeles","2":"WA","3":"United States","4":"48.11410","5":"-123.456500","6":"been"},{"1":"Kyiv","2":"NA","3":"Ukraine","4":"50.45010","5":"30.523400","6":"been"},{"1":"Westport","2":"WA","3":"United States","4":"46.89190","5":"-124.112000","6":"been"},{"1":"Ocala","2":"FL","3":"United States","4":"29.18030","5":"-82.148700","6":"been"},{"1":"Charleston","2":"SC","3":"United States","4":"32.81370","5":"-79.964300","6":"been"},{"1":"Snoqualmie","2":"WA","3":"United States","4":"47.52920","5":"-121.840900","6":"been"},{"1":"Vancouver","2":"BC","3":"Canada","4":"49.28273","5":"-123.120738","6":"been"},{"1":"Orlando","2":"FL","3":"United States","4":"28.48010","5":"-81.344800","6":"been"},{"1":"Washington","2":"DC","3":"United States","4":"38.89011","5":"-77.036719","6":"been"},{"1":"San Diego","2":"CA","3":"United States","4":"32.83120","5":"-117.122500","6":"been"},{"1":"Los Angeles","2":"CA","3":"United States","4":"34.11400","5":"-118.406800","6":"been"},{"1":"New York","2":"NY","3":"United States","4":"40.69430","5":"-73.924900","6":"been"},{"1":"Anaheim","2":"CA","3":"United States","4":"33.83900","5":"-117.857200","6":"been"},{"1":"Savannah","2":"GA","3":"United States","4":"32.02820","5":"-81.178400","6":"been"},{"1":"Forks","2":"WA","3":"United States","4":"47.95260","5":"-124.390600","6":"been"},{"1":"Ormond Beach","2":"FL","3":"United States","4":"29.29510","5":"-81.099900","6":"been"},{"1":"Rincon","2":"PR","3":"United States","4":"18.33890","5":"-67.251500","6":"been"},{"1":"Portland","2":"OR","3":"United States","4":"45.53720","5":"-122.650000","6":"been"},{"1":"Ruby Beach","2":"WA","3":"United States","4":"47.71087","5":"-124.415402","6":"been"},{"1":"Mount Vernon","2":"WA","3":"United States","4":"48.42030","5":"-122.311400","6":"been"},{"1":"Hannah Park","2":"FL","3":"United States","4":"30.37093","5":"-81.406772","6":"been"},{"1":"Oak Harbor","2":"WA","3":"United States","4":"48.29650","5":"-122.633100","6":"been"},{"1":"Eastsound","2":"WA","3":"United States","4":"48.69680","5":"-122.905500","6":"been"},{"1":"Mount Rainier","2":"WA","3":"United States","4":"46.85231","5":"-121.760323","6":"been"},{"1":"Olympia","2":"WA","3":"United States","4":"47.04170","5":"-122.895800","6":"been"},{"1":"Banner Elk","2":"NC","3":"United States","4":"36.15880","5":"-81.867700","6":"been"},{"1":"Robbinsville","2":"NC","3":"United States","4":"35.32214","5":"-83.808309","6":"been"},{"1":"Hollywood","2":"FL","3":"United States","4":"26.02930","5":"-80.167900","6":"been"},{"1":"Key West","2":"FL","3":"United States","4":"24.56360","5":"-81.776800","6":"been"},{"1":"Key Largo","2":"FL","3":"United States","4":"25.12240","5":"-80.412000","6":"been"},{"1":"Philadelphia","2":"PA","3":"United States","4":"39.95219","5":"-75.163516","6":"been"},{"1":"Leavenworth","2":"WA","3":"United States","4":"47.59430","5":"-120.663300","6":"been"},{"1":"Jacksonville","2":"FL","3":"United States","4":"30.33220","5":"-81.674900","6":"been"},{"1":"Boston","2":"MA","3":"United States","4":"42.36553","5":"-71.057234","6":"been"},{"1":"Portland","2":"ME","3":"United States","4":"43.65399","5":"-70.293500","6":"been"},{"1":"New Orleans","2":"LA","3":"United States","4":"29.95536","5":"-90.067277","6":"been"},{"1":"Fargo","2":"GA","3":"United States","4":"30.68810","5":"-82.572100","6":"been"},{"1":"Canon Beach","2":"OR","3":"United States","4":"45.89177","5":"-123.961527","6":"been"},{"1":"Bainbridge Island","2":"WA","3":"United States","4":"47.64390","5":"-122.543400","6":"been"},{"1":"Austin","2":"TX","3":"United States","4":"30.26193","5":"-97.739262","6":"been"},{"1":"Kyiv","2":"NA","3":"Ukraine","4":"50.45010","5":"30.523400","6":"lived"},{"1":"Jacksonville","2":"FL","3":"United States","4":"30.33220","5":"-81.674900","6":"lived"},{"1":"Seattle","2":"WA","3":"United States","4":"47.62121","5":"-122.353633","6":"lived"},{"1":"Kremenchuk","2":"NA","3":"Ukraine","4":"49.06000","5":"33.420000","6":"lived"},{"1":"Hurgada","2":"NA","3":"Egypt","4":"27.20000","5":"33.800000","6":"been"},{"1":"Cairo","2":"NA","3":"Egypt","4":"30.00000","5":"31.200000","6":"been"},{"1":"Skopje","2":"NA","3":"Macedonia","4":"42.00000","5":"21.400000","6":"been"},{"1":"Warsaw","2":"NA","3":"Poland","4":"52.20000","5":"21.000000","6":"been"},{"1":"Budapest","2":"NA","3":"Hungary","4":"47.50000","5":"19.100000","6":"been"},{"1":"Moscow","2":"NA","3":"Russia","4":"55.80000","5":"37.600000","6":"been"},{"1":"Odessa","2":"NA","3":"Ukraine","4":"46.50000","5":"30.700000","6":"been"},{"1":"Dnipro","2":"NA","3":"Ukraine","4":"48.50000","5":"35.100000","6":"been"},{"1":"Zaporizhya","2":"NA","3":"Ukraine","4":"47.80000","5":"35.100000","6":"been"},{"1":"Lviv","2":"NA","3":"Ukraine","4":"49.90000","5":"24.000000","6":"been"},{"1":"Rakhiv","2":"NA","3":"Ukraine","4":"48.10000","5":"24.200000","6":"been"},{"1":"Ivano-Frankivsk","2":"NA","3":"Ukraine","4":"48.90000","5":"24.700000","6":"been"},{"1":"Yaremche","2":"NA","3":"Ukraine","4":"48.40000","5":"24.500000","6":"been"},{"1":"Poltava","2":"NA","3":"Ukraine","4":"49.60000","5":"34.500000","6":"been"},{"1":"Uman","2":"NA","3":"Ukraine","4":"48.70000","5":"30.200000","6":"been"},{"1":"Sudak","2":"NA","3":"Ukraine","4":"44.80000","5":"35.000000","6":"been"},{"1":"Feodosia","2":"NA","3":"Ukraine","4":"45.10000","5":"35.400000","6":"been"},{"1":"Vinnytsya","2":"NA","3":"Ukraine","4":"49.20000","5":"28.500000","6":"been"},{"1":"Khmelnytskyi","2":"NA","3":"Ukraine","4":"49.40000","5":"27.000000","6":"been"},{"1":"Sevastopol","2":"NA","3":"Ukraine","4":"44.50000","5":"33.500000","6":"been"},{"1":"Evpatoria","2":"NA","3":"Ukraine","4":"45.20000","5":"33.300000","6":"been"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<h2 id="rounding-the-coordinates">Rounding the coordinates</h2>
+<p>As I’m creating a pixel map - I need dots in the right places. I’m going to plot a dot for each degree, and therefore I need my coordinates rounded to the nearest degree.</p>
+<aside>
+For smaller maps, consider a dot for each half of degree, in which case, round up to a .5 degree with a formula of y=round(x/5,0)*5
+</aside>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<h2 id="generate-a-pixel-grid">Generate a pixel grid</h2>
+<p>The next step is the key to getting a pixel map. We are going to fill the entire plot with a grid of dots - 180 dots from south to north, and 360 dots from east to west, but then only keep the dots that are on land. Simple!</p>
+<aside>
+If you consider a dot for each half a degree, then change the step from 1 to 0.5
+</aside>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+lat &lt;- tibble(lat = seq(-90, 90, by = 1))
+long &lt;- tibble(long = seq(-180, 180, by = 1))
+dots &lt;- lat %&gt;% 
+        merge(long, all = TRUE)
+
+dots &lt;- dots %&gt;% 
+        mutate(country = map.where(&#39;world&#39;, long, lat),
+               lakes = map.where(&#39;lakes&#39;, long, lat)) %&gt;% 
+        filter(!is.na(country) &amp; is.na(lakes)) %&gt;% 
+        select(-lakes)</code></pre>
+</div>
+<p>At this point, you are pretty much done with prep work. The next step - creating the visuals - will be highly dependent on your data, your needs, and your wants.</p>
+<h2 id="plotting">Plotting</h2>
+<p>As said earlier, this is where we part ways and you are left on your own. I will provide my personal workflow as an example, but it may not work best for your needs. It’s up to you and your creativity now!</p>
+<h3 id="theme">Theme</h3>
+<p>I like defining a theme upfront. Mainly to remove all unnecessary chart features and define main colors.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+color_bk &lt;- &quot;#212121&quot;
+theme &lt;- theme_void() +
+        theme(panel.background = element_rect(fill=color_bk),
+              plot.margin = unit(c(0, 0, 0, 0), &quot;cm&quot;))</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+plot &lt;- ggplot() +   
+        #base layer of map dots
+        geom_point(data = dots, 
+                   aes(x=long, y = lat), 
+                   col = &quot;grey45&quot;, 
+                   size = 0.7) + 
+        #plot all the places I&#39;ve been to
+        geom_point(data = locations, 
+                   aes(x=long_round, y=lat_round), 
+                   color=&quot;grey80&quot;, 
+                   size=0.8) + 
+        #plot all the places I lived in, using red
+        geom_point(data = locations %&gt;% 
+                     filter(flag == &#39;lived&#39;), 
+                   aes(x=long_round, y=lat_round), 
+                   color=&quot;red&quot;, 
+                   size=0.8) +
+        #an extra layer of halo around the places I lived in
+        geom_point(data = locations %&gt;% 
+                     filter(flag == &#39;lived&#39;), 
+                   aes(x=long_round, y=lat_round), 
+                   color=&quot;red&quot;, 
+                   size=6, 
+                   alpha = 0.4) +
+        #adding my theme
+        theme</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body-outset">
+<p><img src="pixel-maps_files/figure-html5/plot-1.png" width="1920" /></p>
+</div>
+<p>A large map like this is not particularly appealing. Zooming in or, say, removing Antarctica, could be a good approach.</p>
+<div class="layout-chunk" data-layout="l-body-outset">
+<pre class="r"><code>
+plot + scale_y_continuous(limits = c(10, 70), expand = c(0,0)) +
+        scale_x_continuous(limits = c(-150,90), expand = c(0,0))</code></pre>
+<p><img src="pixel-maps_files/figure-html5/header-1.png" width="1536" /></p>
+</div>
+<h2 id="final-comments">Final comments</h2>
+<p>Obviously, there is so much more to do with this. The possibilities are endless. The basic idea is pretty simple - generate a point grid and plot rounded coordinates on top of the grid.</p>
+<p>Let me know if you find new implementations of this code!</p>
+<h2 id="update-2020-09-07" class="appendix">Update, 2020-09-07</h2>
+<p>Since its publication, this blog post has been referenced on the following pages:</p>
+<ul>
+<li>Pixel Maps in R: <a href="https://paulvanderlaken.com/2018/01/31/pixel-maps-in-r/" class="uri">https://paulvanderlaken.com/2018/01/31/pixel-maps-in-r/</a></li>
+<li>Pixel/Symbol Map Magic with ggplot: <a href="https://dadascience.design/post/r-pixel-symbol-map-magic-with-ggplot/" class="uri">https://dadascience.design/post/r-pixel-symbol-map-magic-with-ggplot/</a></li>
+<li><a href="https://github.com/lhehnke/tidytuesday" class="uri">https://github.com/lhehnke/tidytuesday</a></li>
+</ul>
+<!--radix_placeholder_article_footer-->
+<!--/radix_placeholder_article_footer-->
+</div>
+
+<div class="d-appendix">
+</div>
+
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_appendices-->
+<div class="appendix-bottom"></div>
+<!--/radix_placeholder_appendices-->
+<!--radix_placeholder_navigation_after_body-->
+<!--/radix_placeholder_navigation_after_body-->
+
+</body>
+
+</html>

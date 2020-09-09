@@ -1,0 +1,106 @@
+---
+title: "Where are the places with the best (and the worst) weather in the United States?"
+description: "Using NOAA GSOD data in determining the amount of pleasant days in USA's core-based statistical areas"
+slug: weather
+author:
+  - name: Taras Kaduk
+    url: https://taraskaduk.com
+date: 2019-02-18
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 2
+bibliography: biblio.bib
+---
+
+```{r include=FALSE}
+library(tweetrmd)
+```
+
+## Introduction
+In my life, I have moved around a bit, and I always think about my next stop. There is a host of factors to consider, and I've seen quite a few great online tools that, for example, help you determine your ideal country based on your political views, preferences and other factors. But what about a domestic move? With a country as large and diverse as the United States, there are many places here that are quite different from one another.
+
+About a year ago or so, I saw a post called "The Pleasant Places to Live" [@Norton2014] showing the locations by the amount of pleasant days in a year.^[After concluding my analysis, I found a similar article in Washington Post, centered around the same concept of pleasant days [@brettschneider2018]. There was no reference to the 2014 article by Norton] My thinking along these lines is that weather is an important factor in determining where to live. Given the weather data for cities of interest, one could define what "pleasant" weather is, and rank the locations according to such weather "pleasantness".
+
+## Methodology
+
+After testing quite a few different approaches, I settled on the same data source used by Norton: NOAA's Global Summary Of The Day database [@gsod]. I extracted years 2012 through 2017 for all US-based weather stations, cleaned it up, filtered it out, did some averaging and fitted a linear regression for every location based on year and day of the year to fill in several missing values.
+
+I then applied this data to 929 metropolitan and micropolitan statistical areas.
+
+Using the idea of counting pleasant days as the approach in measuring weather from sources cited above, I followed the same method. Determining ideal weather conditions is both subjective and depends on other conditions, such as setting (indoor or outdoor), activity (working, sleeping etc.) and other factors. ^[https://www.reddit.com/r/askscience/comments/ulxdg/what_is_the_ideal_temperature_of_surroundings_for/] ^[https://www.healthyheating.com/solutions.htm#.XMnNYJO6Mne] ^[https://www.scientificamerican.com/article/why-people-feel-hot/] ^[https://www.city-data.com/forum/general-u-s/54730-what-your-ideal-outdoor-temperature-4.html] ^[https://health.clevelandclinic.org/what-is-the-ideal-sleeping-temperature-for-my-bedroom/] ^[https://www.outsideonline.com/1784591/whats-best-temperature-productivity] ^[https://www.sleep.org/temperature-for-sleep/] While some studies have been performed on optimal temperature setting for some specific context [@wei_regional_2017], the overall question remains inherently subjective and arbitrary.
+
+Realizing full subjectivity of the parameters set below, my definition of a pleasant (or nice) day is that of a day when:
+
+- the max temperature was under 32°C but above 16°C
+- the min temperature was above 4°C but under 21°C
+- the mean temperature was between 13°C and 24°C
+- no significant rain or snow
+
+
+## Results
+### Overall map
+
+While not within the scope of this analysis, I had some world data that I visualized while working on the article:
+
+```{r echo=FALSE}
+tweet_embed("https://twitter.com/taraskaduk/status/1008879318502604800")
+```
+
+Specific to the United States, the map shows that areas of most pleasant weather include the West Coast and Florida.
+
+```{r echo=FALSE, layout="l-body-outset", preview=TRUE}
+knitr::include_graphics("map.png")
+```
+
+### 50 best and worst
+Moving on to the rankings. Below is the chart design I settled on. Each chart shows 50 metropolitan and/or micropolitan areas, ranked by their average amount of pleasant days in years 2012-2017. The year 2017 is displayed for each area as a tile chart: months on y-axis, days of the month on x-axis. Areas are sorted according to the chart: from most to least in "most pleasant days", and from least to most in "least pleasant days": the most winner or loser is always on top
+
+#### Top 50 best, all metropolitan and micropolitan
+
+This is top 50 out of all areas for which there is data. Nothing surprising at the top, with California leading the way. Tennessee was a bit of a surprise to me (these smaller towns also don't seem to report a lot or any rain, which is suspicious). Also, it changed my frame of reference about Florida a bit: I live here now, and I consider it unpleasant (because it is very hot in the summer), but I must agree that our winters are very nice, and it looks like we've got it good compared to the rest of the country.
+
+![](50_most_all_5_cols_.png) 
+<a href="50_most_all_5_cols_.png" target="_blank">[Full-size vertical version]</a> | <a href="50_most_all_10_cols_.png" target="_blank">[Full-size horizontal version]</a> 
+
+#### Top 50 worst, all metropolitan and micropolitan
+In the "worst" section, we see all the usual suspects: Wyoming, Alaska, Montana, North Dakota. Also, Puerto Rico and Key West, FL are the only places that are too hot: the rest is too cold.
+![](50_least_all_5_cols_.png)
+
+#### Top 50 best metro areas
+
+Micropolitan areas are not always on everyone's mind, and therefore I wanted to look at metro areas specifically.
+No surprise here either, with California and Florida having the 2/3 of top 50 metro areas. The first non-California metro area is Serbing, FL, 11th in the rank.
+![](50_most_M1_5_cols_.png)
+
+#### Top 50 worst metro areas
+Over on the other side, not so pleasant places still include Puerto Rico and the Northern USA, but now we see a lot more of Eastern Washington and Oregon, along with that cold Northeast.
+
+![](50_least_M1_5_cols_.png)
+
+### Top 25 best and worst metro areas with population over 1,000,000 people
+
+Finally, I ranked the biggest metro areas  - the ones with the population over 1 million - in the same way.
+Here are 25 best and worst metro areas with over 1,000,000 people. This time, I used a different design, displaying all 6 years per metro area as "tree rings", using polar coordinates 
+
+![](25_most_1000_polar_.png)
+
+![](25_least_1000_polar_.png)
+
+## Discussion
+
+I feel very good about letting these imperfect charts out into the wild. Mostly, I feel liberated to be able to move on and do other things. Funny enough, one of these "other things" is to re-do this analysis, but keep it simpler and rely on existing packages rather than reinventing the wheel. Why re-do? Well, I still want to work on this project **"Best place to live"**, and weather is one important metric out of many. But this time around, I won't need all the precision, all the complexity, all the `ggplot` wizardry: I'll just accept a simple and somewhat imperfect metric as a proxy, as it will be one of many other numbers. So, stay tuned!
+
+## Update 2019-12-01 {.appendix}
+
+This post has been referenced or credited on the following pages:
+
+- DIGG.com: https://digg.com/2019/top-25-cities-most-pleasant-days-data-viz
+- CBS13 Sacramento: https://gooddaysacramento.cbslocal.com/2019/04/30/sacramento-pleasant-weather/
+- Revolutions Analytics: https://blog.revolutionanalytics.com/2019/03/best-and-worst-weather.html
+- Reddit: 
+  - Visualization of mean daily temperatures over the past five full years for 12 Canadian cities: https://www.reddit.com/r/dataisbeautiful/comments/b6qle0/visualization_of_mean_daily_temperatures_over_the/
+  - Mean daily temperatures over the past 5 years for Ottawa and 11 other Canadian cities: https://www.reddit.com/r/ottawa/comments/b6vupb/mean_daily_temperatures_over_the_past_5_years_for/
+  
+My own submission at r/dataisbeautiful: https://www.reddit.com/r/dataisbeautiful/comments/byjies/top_25_world_cities_with_most_pleasant_days_in_a/
