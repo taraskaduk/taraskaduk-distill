@@ -20,4 +20,9 @@ navbar:
       href: index.xml
     - icon: fa fa-github
       href: https://github.com/taraskaduk
-output: distill::distill_article
+output:
+  distill::distill_article:
+    css: style.css
+    includes:
+      in_header: utterances.html
+    
