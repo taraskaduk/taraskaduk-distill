@@ -1,69 +1,68 @@
 /* Import fonts from Google's API */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display');
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css2?family=Raleway');
+@import url('https://fonts.googleapis.com/css2?family=Lusitana');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono');
 
 
 
+/*
 .distill-site-nav {
-    font-family: 'Playfair Display', sans-serif;
+    font-family: 'Raleway', sans-serif;
     color: #000;
     background-color: #fff;
-    font-size: 15px;
-    font-weight: 400;
+    font-size: 16px;
+    font-weight: 500;
 }
 
 .distill-site-header {
-    font-family: 'Playfair Display', sans-serif;
+    font-family: 'Raleway', sans-serif;
     color: #000;
     background-color: #fff;
-    font-size: 15px;
+    font-size: 12px;
     font-weight: 400;
 }
 
 .distill-site-nav a:hover {
-    color: #ff00ff;
+    color: #56638c;
 }
 
 .categories li > a:hover {
-    color: #00ff00;
-    border-bottom: 1px #00ff00;
+    color: #56638c;
+    border-bottom: 1px #56638c;
 }
 
 p a:hover  {
-    color: #00ff00;
+    color: #56638c;
 }
 
-/* Change appearance of headers */
-h1, h2, h3, h4, h5 {
-    font-family: 'Playfair Display', sans-serif;
-    font-weight: 700;
+
+h1 {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 600;
 }
 
-/* Use specific font in the body of the text */
+h2, h3, h4, h5 {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 500;
+}
+
+
 html, body, p {
-    
-    font-family: 'Open Sans', serif;
-    font-weight: 200;
-    line-height: 1.3; 
-    font-size: 1.075em;
-    font-style: normal;
-    
+    font-family: 'Lusitana', serif;
+    line-height: 2; 
 }
 
 .posts-list .description p {
-    font-family: 'Open Sans', serif !important;
+    font-family: 'Roboto Mono', serif !important;
     color: gray !important;
 }
 
 .posts-list .description h2 {
-    font-family: 'Playfair Display', sans-serif !important;
+    font-family: 'Raleway', sans-serif !important;
 }
+*/
 
-d-appendix {
-    color: rgb(0, 0, 0) !important;
-}
-
-li::marker {
-    font-weight: 700;
-    font-size: 1.125em;
-}
+th, td { 
+    font-family: 'Roboto Mono';
+  }
+    
