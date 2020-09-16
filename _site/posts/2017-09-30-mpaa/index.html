@@ -1326,10 +1326,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <style type="text/css">
 /* Import fonts from Google's API */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono');
+@import url('https://fonts.googleapis.com/css2?family=Lato');
 @import url('https://fonts.googleapis.com/css2?family=Raleway');
 @import url('https://fonts.googleapis.com/css2?family=Lusitana');
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono');
 
+
+
+body {
+  font-family: "Raleway";
+}
 
 .distill-site-nav {
     color: #000;
@@ -1339,6 +1345,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .distill-site-nav a:hover {
     color: #56638c;
+}
+
+d-title h1 {
+    font-weight: 500;
+    font-size: 40px;
 }
 
 
