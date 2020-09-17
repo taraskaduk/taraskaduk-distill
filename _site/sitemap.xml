@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" version="1.0">
   <url>
     <loc>https://taraskaduk.com/about.html</loc>
-    <lastmod>2020-09-09T15:52:09-04:00</lastmod>
+    <lastmod>2020-09-16T20:40:11-04:00</lastmod>
   </url>
   <url>
     <loc>https://taraskaduk.com/</loc>
@@ -17,8 +17,20 @@
     <lastmod>2020-09-09T15:53:19-04:00</lastmod>
   </url>
   <url>
+    <loc>https://taraskaduk.com/posts/2019-10-23-is-rock-dying/</loc>
+    <lastmod>2020-09-16T20:37:45-04:00</lastmod>
+  </url>
+  <url>
+    <loc>https://taraskaduk.com/posts/2019-03-23-apple-health/</loc>
+    <lastmod>2020-09-16T20:27:56-04:00</lastmod>
+  </url>
+  <url>
     <loc>https://taraskaduk.com/posts/2019-02-18-weather/</loc>
-    <lastmod>2020-09-09T15:55:56-04:00</lastmod>
+    <lastmod>2020-09-16T20:24:08-04:00</lastmod>
+  </url>
+  <url>
+    <loc>https://taraskaduk.com/posts/2018-03-29-power-query/</loc>
+    <lastmod>2020-09-16T20:24:02-04:00</lastmod>
   </url>
   <url>
     <loc>https://taraskaduk.com/posts/2017-11-26-pixel-maps/</loc>

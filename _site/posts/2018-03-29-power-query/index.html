@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+  <meta name="generator" content="distill" />
+
+  <style type="text/css">
+  /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
+  body {
+    visibility: hidden;
+  }
+  </style>
+
+ <!--radix_placeholder_import_source-->
+ <!--/radix_placeholder_import_source-->
+
+  <!--radix_placeholder_meta_tags-->
+<title>Taras Kaduk: Power Query: Excel's gateway to reproducible analysis</title>
+
+<meta property="description" itemprop="description" content="Review of Power Query&#39;s scripting language as a way to evangelize reproducible data analysis and programming with minimal learning investment"/>
+
+<link rel="canonical" href="https://taraskaduk.com/posts/2018-03-29-power-query/"/>
+<link rel="license" href="https://creativecommons.org/licenses/by/4.0/"/>
+
+<!--  https://schema.org/Article -->
+<meta property="article:published" itemprop="datePublished" content="2018-03-29"/>
+<meta property="article:created" itemprop="dateCreated" content="2018-03-29"/>
+<meta name="article:author" content="Taras Kaduk"/>
+
+<!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
+<meta property="og:title" content="Taras Kaduk: Power Query: Excel&#39;s gateway to reproducible analysis"/>
+<meta property="og:type" content="article"/>
+<meta property="og:description" content="Review of Power Query&#39;s scripting language as a way to evangelize reproducible data analysis and programming with minimal learning investment"/>
+<meta property="og:url" content="https://taraskaduk.com/posts/2018-03-29-power-query/"/>
+<meta property="og:image" content="https://taraskaduk.com/posts/2018-03-29-power-query/cover.png"/>
+<meta property="og:image:width" content="1461"/>
+<meta property="og:image:height" content="789"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:site_name" content="Taras Kaduk"/>
+
+<!--  https://dev.twitter.com/cards/types/summary -->
+<meta property="twitter:card" content="summary_large_image"/>
+<meta property="twitter:title" content="Taras Kaduk: Power Query: Excel&#39;s gateway to reproducible analysis"/>
+<meta property="twitter:description" content="Review of Power Query&#39;s scripting language as a way to evangelize reproducible data analysis and programming with minimal learning investment"/>
+<meta property="twitter:url" content="https://taraskaduk.com/posts/2018-03-29-power-query/"/>
+<meta property="twitter:image" content="https://taraskaduk.com/posts/2018-03-29-power-query/cover.png"/>
+<meta property="twitter:image:width" content="1461"/>
+<meta property="twitter:image:height" content="789"/>
+<meta property="twitter:site" content="@taraskaduk"/>
+
+<!--  https://scholar.google.com/intl/en/scholar/inclusion.html#indexing -->
+<meta name="citation_title" content="Taras Kaduk: Power Query: Excel&#39;s gateway to reproducible analysis"/>
+<meta name="citation_fulltext_html_url" content="https://taraskaduk.com/posts/2018-03-29-power-query/"/>
+<meta name="citation_fulltext_world_readable" content=""/>
+<meta name="citation_online_date" content="2018/03/29"/>
+<meta name="citation_publication_date" content="2018/03/29"/>
+<meta name="citation_author" content="Taras Kaduk"/>
+<!--/radix_placeholder_meta_tags-->
+  <!--radix_placeholder_rmarkdown_metadata-->
+
+<script type="text/json" id="radix-rmarkdown-metadata">
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["creative_commons","title","description","date","author","output","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["CC BY"]},{"type":"character","attributes":{},"value":["Power Query: Excel's gateway to reproducible analysis"]},{"type":"character","attributes":{},"value":["Review of Power Query's scripting language as a way to evangelize reproducible data analysis and programming with minimal learning investment"]},{"type":"character","attributes":{},"value":["2018-03-29"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Taras Kaduk"]},{"type":"character","attributes":{},"value":["https://taraskaduk.com"]}]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"character","attributes":{},"value":["https://taraskaduk.com/posts/2018-03-29-power-query/"]},{"type":"character","attributes":{},"value":["https://taraskaduk.com/posts/2018-03-29-power-query/"]}]}
+</script>
+<!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["1.png","2.png","3.png","cover.png","gapminder.xlsx","got-1.png","gui1.png","gui2.png","gui3.png","gui4.png","gui5.png","json.png","power_query_gapminder.txt","power-query_files/bowser-1.9.3/bowser.min.js","power-query_files/distill-2.2.21/template.v2.js","power-query_files/jquery-1.11.3/jquery.min.js","power-query_files/twitter-widget-0.0.1/widgets.js","power-query_files/webcomponents-2.0.0/webcomponents.js","test.xlsx","test1.png","test2.png"]}
+  </script>
+  <!--radix_placeholder_navigation_in_header-->
+
+<script type="application/javascript">
+
+  window.headroom_prevent_pin = false;
+
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+
+    // initialize headroom for banner
+    var header = $('header').get(0);
+    var headerHeight = header.offsetHeight;
+    var headroom = new Headroom(header, {
+      onPin : function() {
+        if (window.headroom_prevent_pin) {
+          window.headroom_prevent_pin = false;
+          headroom.unpin();
+        }
+      }
+    });
+    headroom.init();
+    if(window.location.hash)
+      headroom.unpin();
+    $(header).addClass('headroom--transition');
+
+    // offset scroll location for banner on hash change
+    // (see: https://github.com/WickyNilliams/headroom.js/issues/38)
+    window.addEventListener("hashchange", function(event) {
+      window.scrollTo(0, window.pageYOffset - (headerHeight + 25));
+    });
+
+    // responsive menu
+    $('.distill-site-header').each(function(i, val) {
+      var topnav = $(this);
+      var toggle = topnav.find('.nav-toggle');
+      toggle.on('click', function() {
+        topnav.toggleClass('responsive');
+      });
+    });
+
+    // nav dropdowns
+    $('.nav-dropbtn').click(function(e) {
+      $(this).next('.nav-dropdown-content').toggleClass('nav-dropdown-active');
+      $(this).parent().siblings('.nav-dropdown')
+         .children('.nav-dropdown-content').removeClass('nav-dropdown-active');
+    });
+    $("body").click(function(e){
+      $('.nav-dropdown-content').removeClass('nav-dropdown-active');
+    });
+    $(".nav-dropdown").click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+
+<style type="text/css">
+
+/* Theme (user-documented overrideables for nav appearance) */
+
+.distill-site-nav {
+  color: rgba(255, 255, 255, 0.8);
+  background-color: #455a64;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.distill-site-nav a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.distill-site-nav a:hover {
+  color: white;
+}
+
+@media print {
+  .distill-site-nav {
+    display: none;
+  }
+}
+
+.distill-site-header {
+
+}
+
+.distill-site-footer {
+
+}
+
+
+/* Site Header */
+
+.distill-site-header {
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 3;
+}
+
+.distill-site-header .nav-left {
+  display: inline-block;
+  margin-left: 8px;
+}
+
+@media screen and (max-width: 768px) {
+  .distill-site-header .nav-left {
+    margin-left: 0;
+  }
+}
+
+
+.distill-site-header .nav-right {
+  float: right;
+  margin-right: 8px;
+}
+
+.distill-site-header a,
+.distill-site-header .title {
+  display: inline-block;
+  text-align: center;
+  padding: 14px 10px 14px 10px;
+}
+
+.distill-site-header .title {
+  font-size: 18px;
+}
+
+.distill-site-header .logo {
+  padding: 0;
+}
+
+.distill-site-header .logo img {
+  display: none;
+  max-height: 20px;
+  width: auto;
+  margin-bottom: -4px;
+}
+
+.distill-site-header .nav-image img {
+  max-height: 18px;
+  width: auto;
+  display: inline-block;
+  margin-bottom: -3px;
+}
+
+
+
+@media screen and (min-width: 1000px) {
+  .distill-site-header .logo img {
+    display: inline-block;
+  }
+  .distill-site-header .nav-left {
+    margin-left: 20px;
+  }
+  .distill-site-header .nav-right {
+    margin-right: 20px;
+  }
+  .distill-site-header .title {
+    padding-left: 12px;
+  }
+}
+
+
+.distill-site-header .nav-toggle {
+  display: none;
+}
+
+.nav-dropdown {
+  display: inline-block;
+  position: relative;
+}
+
+.nav-dropdown .nav-dropbtn {
+  border: none;
+  outline: none;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 16px 10px;
+  background-color: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+  margin-top: 1px;
+  z-index: 2;
+}
+
+.nav-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 200px;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 4px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+  z-index: 1;
+  margin-top: 2px;
+  white-space: nowrap;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.nav-dropdown-content hr {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.nav-dropdown-active {
+  display: block;
+}
+
+.nav-dropdown-content a, .nav-dropdown-content .nav-dropdown-header {
+  color: black;
+  padding: 6px 24px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.nav-dropdown-content .nav-dropdown-header {
+  display: block;
+  padding: 5px 24px;
+  padding-bottom: 0;
+  text-transform: uppercase;
+  font-size: 14px;
+  color: #999999;
+  white-space: nowrap;
+}
+
+.nav-dropdown:hover .nav-dropbtn {
+  color: white;
+}
+
+.nav-dropdown-content a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.nav-right .nav-dropdown-content {
+  margin-left: -45%;
+  right: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .distill-site-header a, .distill-site-header .nav-dropdown  {display: none;}
+  .distill-site-header a.nav-toggle {
+    float: right;
+    display: block;
+  }
+  .distill-site-header .title {
+    margin-left: 0;
+  }
+  .distill-site-header .nav-right {
+    margin-right: 0;
+  }
+  .distill-site-header {
+    overflow: hidden;
+  }
+  .nav-right .nav-dropdown-content {
+    margin-left: 0;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .distill-site-header.responsive {position: relative;}
+  .distill-site-header.responsive a.nav-toggle {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .distill-site-header.responsive a,
+  .distill-site-header.responsive .nav-dropdown {
+    display: block;
+    text-align: left;
+  }
+  .distill-site-header.responsive .nav-left,
+  .distill-site-header.responsive .nav-right {
+    width: 100%;
+  }
+  .distill-site-header.responsive .nav-dropdown {float: none;}
+  .distill-site-header.responsive .nav-dropdown-content {position: relative;}
+  .distill-site-header.responsive .nav-dropdown .nav-dropbtn {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+}
+
+/* Site Footer */
+
+.distill-site-footer {
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 3;
+  margin-top: 30px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
+}
+
+/* Headroom */
+
+d-title {
+  padding-top: 6rem;
+}
+
+@media print {
+  d-title {
+    padding-top: 4rem;
+  }
+}
+
+.headroom {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.headroom--transition {
+  transition: all .4s ease-in-out;
+}
+
+.headroom--unpinned {
+  top: -100px;
+}
+
+.headroom--pinned {
+  top: 0;
+}
+
+</style>
+
+<link href="../../site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
+<link href="../../site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
+<script src="../../site_libs/headroom-0.9.4/headroom.min.js"></script>
+<!--/radix_placeholder_navigation_in_header-->
+  <!--radix_placeholder_distill-->
+
+<style type="text/css">
+
+body {
+  background-color: white;
+}
+
+.pandoc-table {
+  width: 100%;
+}
+
+.pandoc-table>caption {
+  margin-bottom: 10px;
+}
+
+.pandoc-table th:not([align]) {
+  text-align: left;
+}
+
+.pagedtable-footer {
+  font-size: 15px;
+}
+
+.html-widget {
+  margin-bottom: 2.0em;
+}
+
+.l-screen-inset {
+  padding-right: 16px;
+}
+
+.l-screen .caption {
+  margin-left: 10px;
+}
+
+.shaded {
+  background: rgb(247, 247, 247);
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.shaded .html-widget {
+  margin-bottom: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.shaded .shaded-content {
+  background: white;
+}
+
+.text-output {
+  margin-top: 0;
+  line-height: 1.5em;
+}
+
+.hidden {
+  display: none !important;
+}
+
+d-article {
+  padding-bottom: 30px;
+}
+
+d-appendix {
+  padding-top: 30px;
+}
+
+d-article>p>img {
+  width: 100%;
+}
+
+d-article iframe {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 2.0em;
+  width: 100%;
+}
+
+figure img.external {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+/* CSS for table of contents */
+
+.d-toc {
+  color: rgba(0,0,0,0.8);
+  font-size: 0.8em;
+  line-height: 1em;
+}
+
+.d-toc-header {
+  font-size: 0.6rem;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.5);
+  text-transform: uppercase;
+  margin-top: 0;
+  margin-bottom: 1.3em;
+}
+
+.d-toc a {
+  border-bottom: none;
+}
+
+.d-toc ul {
+  padding-left: 0;
+}
+
+.d-toc li>ul {
+  padding-top: 0.8em;
+  padding-left: 16px;
+  margin-bottom: 0.6em;
+}
+
+.d-toc ul,
+.d-toc li {
+  list-style-type: none;
+}
+
+.d-toc li {
+  margin-bottom: 0.9em;
+}
+
+.d-toc-separator {
+  margin-top: 20px;
+  margin-bottom: 2em;
+}
+
+.d-article-with-toc {
+  border-top: none;
+  padding-top: 0;
+}
+
+
+
+/* Tweak code blocks (note that this CSS is repeated above in an injection
+   into the d-code shadow dom) */
+
+d-code {
+  overflow-x: auto !important;
+}
+
+pre.d-code code.d-code {
+  padding-left: 10px;
+  font-size: 12px;
+  border-left: 2px solid rgba(0,0,0,0.1);
+}
+
+pre.text-output {
+
+  font-size: 12px;
+  color: black;
+  background: none;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+@media(min-width: 768px) {
+
+d-code {
+  overflow-x: visible !important;
+}
+
+pre.d-code code.d-code  {
+    padding-left: 18px;
+    font-size: 14px;
+}
+pre.text-output {
+  font-size: 14px;
+}
+}
+
+/* Figure */
+
+.figure {
+  position: relative;
+  margin-bottom: 2.5em;
+  margin-top: 1.5em;
+}
+
+.figure img {
+  width: 100%;
+}
+
+.figure .caption {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 12px;
+  line-height: 1.5em;
+}
+
+.figure img.external {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+.figure .caption a {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.figure .caption b,
+.figure .caption strong, {
+  font-weight: 600;
+  color: rgba(0, 0, 0, 1.0);
+}
+
+/* Citations */
+
+d-article .citation {
+  color: inherit;
+  cursor: inherit;
+}
+
+div.hanging-indent{
+  margin-left: 1em; text-indent: -1em;
+}
+
+
+/* Tweak 1000px media break to show more text */
+
+@media(min-width: 1000px) {
+  .base-grid,
+  distill-header,
+  d-title,
+  d-abstract,
+  d-article,
+  d-appendix,
+  distill-appendix,
+  d-byline,
+  d-footnote-list,
+  d-citation-list,
+  distill-footer {
+    grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
+    grid-column-gap: 16px;
+  }
+
+  .grid {
+    grid-column-gap: 16px;
+  }
+
+  d-article {
+    font-size: 1.06rem;
+    line-height: 1.7em;
+  }
+  figure .caption, .figure .caption, figure figcaption {
+    font-size: 13px;
+  }
+}
+
+@media(min-width: 1180px) {
+  .base-grid,
+  distill-header,
+  d-title,
+  d-abstract,
+  d-article,
+  d-appendix,
+  distill-appendix,
+  d-byline,
+  d-footnote-list,
+  d-citation-list,
+  distill-footer {
+    grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+    grid-column-gap: 32px;
+  }
+
+  .grid {
+    grid-column-gap: 32px;
+  }
+}
+
+
+/* Get the citation styles for the appendix (not auto-injected on render since
+   we do our own rendering of the citation appendix) */
+
+d-appendix .citation-appendix,
+.d-appendix .citation-appendix {
+  font-size: 11px;
+  line-height: 15px;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  padding-left: 18px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background: rgba(0, 0, 0, 0.02);
+  padding: 10px 18px;
+  border-radius: 3px;
+  color: rgba(150, 150, 150, 1);
+  overflow: hidden;
+  margin-top: -12px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+
+/* Social footer */
+
+.social_footer {
+  margin-top: 30px;
+  margin-bottom: 0;
+  color: rgba(0,0,0,0.67);
+}
+
+.disqus-comments {
+  margin-right: 30px;
+}
+
+.disqus-comment-count {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+#disqus_thread {
+  margin-top: 30px;
+}
+
+.article-sharing a {
+  border-bottom: none;
+  margin-right: 8px;
+}
+
+.article-sharing a:hover {
+  border-bottom: none;
+}
+
+.sidebar-section.subscribe {
+  font-size: 12px;
+  line-height: 1.6em;
+}
+
+.subscribe p {
+  margin-bottom: 0.5em;
+}
+
+
+.article-footer .subscribe {
+  font-size: 15px;
+  margin-top: 45px;
+}
+
+
+.sidebar-section.custom {
+  font-size: 12px;
+  line-height: 1.6em;
+}
+
+.custom p {
+  margin-bottom: 0.5em;
+}
+
+
+/* Improve display for browsers without grid (IE/Edge <= 15) */
+
+.downlevel {
+  line-height: 1.6em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+}
+
+.downlevel .d-title {
+  padding-top: 6rem;
+  padding-bottom: 1.5rem;
+}
+
+.downlevel .d-title h1 {
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 1.1em;
+  margin: 0 0 0.5rem;
+}
+
+.downlevel .d-title p {
+  font-weight: 300;
+  font-size: 1.2rem;
+  line-height: 1.55em;
+  margin-top: 0;
+}
+
+.downlevel .d-byline {
+  padding-top: 0.8em;
+  padding-bottom: 0.8em;
+  font-size: 0.8rem;
+  line-height: 1.8em;
+}
+
+.downlevel .section-separator {
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.downlevel .d-article {
+  font-size: 1.06rem;
+  line-height: 1.7em;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+}
+
+
+.downlevel .d-appendix {
+  padding-left: 0;
+  padding-right: 0;
+  max-width: none;
+  font-size: 0.8em;
+  line-height: 1.7em;
+  margin-bottom: 0;
+  color: rgba(0,0,0,0.5);
+  padding-top: 40px;
+  padding-bottom: 48px;
+}
+
+.downlevel .footnotes ol {
+  padding-left: 13px;
+}
+
+.downlevel .base-grid,
+.downlevel .distill-header,
+.downlevel .d-title,
+.downlevel .d-abstract,
+.downlevel .d-article,
+.downlevel .d-appendix,
+.downlevel .distill-appendix,
+.downlevel .d-byline,
+.downlevel .d-footnote-list,
+.downlevel .d-citation-list,
+.downlevel .distill-footer,
+.downlevel .appendix-bottom,
+.downlevel .posts-container {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+@media(min-width: 768px) {
+  .downlevel .base-grid,
+  .downlevel .distill-header,
+  .downlevel .d-title,
+  .downlevel .d-abstract,
+  .downlevel .d-article,
+  .downlevel .d-appendix,
+  .downlevel .distill-appendix,
+  .downlevel .d-byline,
+  .downlevel .d-footnote-list,
+  .downlevel .d-citation-list,
+  .downlevel .distill-footer,
+  .downlevel .appendix-bottom,
+  .downlevel .posts-container {
+  padding-left: 150px;
+  padding-right: 150px;
+  max-width: 900px;
+}
+}
+
+.downlevel pre code {
+  display: block;
+  border-left: 2px solid rgba(0, 0, 0, .1);
+  padding: 0 0 0 20px;
+  font-size: 14px;
+}
+
+.downlevel code, .downlevel pre {
+  color: black;
+  background: none;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+</style>
+
+<script type="application/javascript">
+
+function is_downlevel_browser() {
+  if (bowser.isUnsupportedBrowser({ msie: "12", msedge: "16"},
+                                 window.navigator.userAgent)) {
+    return true;
+  } else {
+    return window.load_distill_framework === undefined;
+  }
+}
+
+// show body when load is complete
+function on_load_complete() {
+
+  // set body to visible
+  document.body.style.visibility = 'visible';
+
+  // force redraw for leaflet widgets
+  if (window.HTMLWidgets) {
+    var maps = window.HTMLWidgets.findAll(".leaflet");
+    $.each(maps, function(i, el) {
+      var map = this.getMap();
+      map.invalidateSize();
+      map.eachLayer(function(layer) {
+        if (layer instanceof L.TileLayer)
+          layer.redraw();
+      });
+    });
+  }
+
+  // trigger 'shown' so htmlwidgets resize
+  $('d-article').trigger('shown');
+}
+
+function init_distill() {
+
+  init_common();
+
+  // create front matter
+  var front_matter = $('<d-front-matter></d-front-matter>');
+  $('#distill-front-matter').wrap(front_matter);
+
+  // create d-title
+  $('.d-title').changeElementType('d-title');
+
+  // create d-byline
+  var byline = $('<d-byline></d-byline>');
+  $('.d-byline').replaceWith(byline);
+
+  // create d-article
+  var article = $('<d-article></d-article>');
+  $('.d-article').wrap(article).children().unwrap();
+
+  // move posts container into article
+  $('.posts-container').appendTo($('d-article'));
+
+  // create d-appendix
+  $('.d-appendix').changeElementType('d-appendix');
+
+  // flag indicating that we have appendix items
+  var appendix = $('.appendix-bottom').children('h3').length > 0;
+
+  // replace footnotes with <d-footnote>
+  $('.footnote-ref').each(function(i, val) {
+    appendix = true;
+    var href = $(this).attr('href');
+    var id = href.replace('#', '');
+    var fn = $('#' + id);
+    var fn_p = $('#' + id + '>p');
+    fn_p.find('.footnote-back').remove();
+    var text = fn_p.html();
+    var dtfn = $('<d-footnote></d-footnote>');
+    dtfn.html(text);
+    $(this).replaceWith(dtfn);
+  });
+  // remove footnotes
+  $('.footnotes').remove();
+
+  // move refs into #references-listing
+  $('#references-listing').replaceWith($('#refs'));
+
+  $('h1.appendix, h2.appendix').each(function(i, val) {
+    $(this).changeElementType('h3');
+  });
+  $('h3.appendix').each(function(i, val) {
+    var id = $(this).attr('id');
+    $('.d-toc a[href="#' + id + '"]').parent().remove();
+    appendix = true;
+    $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('d-appendix'));
+  });
+
+  // show d-appendix if we have appendix content
+  $("d-appendix").css('display', appendix ? 'grid' : 'none');
+
+  // replace code blocks with d-code
+  $('pre>code').each(function(i, val) {
+    var code = $(this);
+    var pre = code.parent();
+    var clz = "";
+    var language = pre.attr('class');
+    if (language) {
+      // map unknown languages to "clike" (without this they just dissapear)
+      if ($.inArray(language, ["bash", "clike", "css", "go", "html",
+                               "javascript", "js", "julia", "lua", "markdown",
+                               "markup", "mathml", "python", "svg", "xml"]) == -1)
+        language = "clike";
+      language = ' language="' + language + '"';
+      var dt_code = $('<d-code block' + language + clz + '></d-code>');
+      dt_code.text(code.text());
+      pre.replaceWith(dt_code);
+    } else {
+      code.addClass('text-output').unwrap().changeElementType('pre');
+    }
+  });
+
+  // localize layout chunks to just output
+  $('.layout-chunk').each(function(i, val) {
+
+    // capture layout
+    var layout = $(this).attr('data-layout');
+
+    // apply layout to markdown level block elements
+    var elements = $(this).children().not('d-code, pre.text-output, script');
+    elements.each(function(i, el) {
+      var layout_div = $('<div class="' + layout + '"></div>');
+      if (layout_div.hasClass('shaded')) {
+        var shaded_content = $('<div class="shaded-content"></div>');
+        $(this).wrap(shaded_content);
+        $(this).parent().wrap(layout_div);
+      } else {
+        $(this).wrap(layout_div);
+      }
+    });
+
+
+    // unwrap the layout-chunk div
+    $(this).children().unwrap();
+  });
+
+  // load distill framework
+  load_distill_framework();
+
+  // wait for window.distillRunlevel == 4 to do post processing
+  function distill_post_process() {
+
+    if (!window.distillRunlevel || window.distillRunlevel < 4)
+      return;
+
+    // hide author/affiliations entirely if we have no authors
+    var front_matter = JSON.parse($("#distill-front-matter").html());
+    var have_authors = front_matter.authors && front_matter.authors.length > 0;
+    if (!have_authors)
+      $('d-byline').addClass('hidden');
+
+    // table of contents
+    if (have_authors) // adjust border if we are in authors
+      $('.d-toc').parent().addClass('d-article-with-toc');
+
+    // strip links that point to #
+    $('.authors-affiliations').find('a[href="#"]').removeAttr('href');
+
+    // hide elements of author/affiliations grid that have no value
+    function hide_byline_column(caption) {
+      $('d-byline').find('h3:contains("' + caption + '")').parent().css('visibility', 'hidden');
+    }
+
+    // affiliations
+    var have_affiliations = false;
+    for (var i = 0; i<front_matter.authors.length; ++i) {
+      var author = front_matter.authors[i];
+      if (author.affiliation !== "&nbsp;") {
+        have_affiliations = true;
+        break;
+      }
+    }
+    if (!have_affiliations)
+      $('d-byline').find('h3:contains("Affiliations")').css('visibility', 'hidden');
+
+    // published date
+    if (!front_matter.publishedDate)
+      hide_byline_column("Published");
+
+    // document object identifier
+    var doi = $('d-byline').find('h3:contains("DOI")');
+    var doi_p = doi.next().empty();
+    if (!front_matter.doi) {
+      // if we have a citation and valid citationText then link to that
+      if ($('#citation').length > 0 && front_matter.citationText) {
+        doi.html('Citation');
+        $('<a href="#citation"></a>')
+          .text(front_matter.citationText)
+          .appendTo(doi_p);
+      } else {
+        hide_byline_column("DOI");
+      }
+    } else {
+      $('<a></a>')
+         .attr('href', "https://doi.org/" + front_matter.doi)
+         .html(front_matter.doi)
+         .appendTo(doi_p);
+    }
+
+     // change plural form of authors/affiliations
+    if (front_matter.authors.length === 1) {
+      var grid = $('.authors-affiliations');
+      grid.children('h3:contains("Authors")').text('Author');
+      grid.children('h3:contains("Affiliations")').text('Affiliation');
+    }
+
+    // inject pre code styles (can't do this with a global stylesheet b/c a shadow root is used)
+    $('d-code').each(function(i, val) {
+      var style = document.createElement('style');
+      style.innerHTML = 'pre code { padding-left: 10px; font-size: 12px; border-left: 2px solid rgba(0,0,0,0.1); } ' +
+                        '@media(min-width: 768px) { pre code { padding-left: 18px; font-size: 14px; } }';
+      if (this.shadowRoot)
+        this.shadowRoot.appendChild(style);
+    });
+
+    // move appendix-bottom entries to the bottom
+    $('.appendix-bottom').appendTo('d-appendix').children().unwrap();
+    $('.appendix-bottom').remove();
+
+    // clear polling timer
+    clearInterval(tid);
+
+    // show body now that everything is ready
+    on_load_complete();
+  }
+
+  var tid = setInterval(distill_post_process, 50);
+  distill_post_process();
+
+}
+
+function init_downlevel() {
+
+  init_common();
+
+   // insert hr after d-title
+  $('.d-title').after($('<hr class="section-separator"/>'));
+
+  // check if we have authors
+  var front_matter = JSON.parse($("#distill-front-matter").html());
+  var have_authors = front_matter.authors && front_matter.authors.length > 0;
+
+  // manage byline/border
+  if (!have_authors)
+    $('.d-byline').remove();
+  $('.d-byline').after($('<hr class="section-separator"/>'));
+  $('.d-byline a').remove();
+
+  // remove toc
+  $('.d-toc-header').remove();
+  $('.d-toc').remove();
+  $('.d-toc-separator').remove();
+
+  // move appendix elements
+  $('h1.appendix, h2.appendix').each(function(i, val) {
+    $(this).changeElementType('h3');
+  });
+  $('h3.appendix').each(function(i, val) {
+    $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('.d-appendix'));
+  });
+
+
+  // inject headers into references and footnotes
+  var refs_header = $('<h3></h3>');
+  refs_header.text('References');
+  $('#refs').prepend(refs_header);
+
+  var footnotes_header = $('<h3></h3');
+  footnotes_header.text('Footnotes');
+  $('.footnotes').children('hr').first().replaceWith(footnotes_header);
+
+  // move appendix-bottom entries to the bottom
+  $('.appendix-bottom').appendTo('.d-appendix').children().unwrap();
+  $('.appendix-bottom').remove();
+
+  // remove appendix if it's empty
+  if ($('.d-appendix').children().length === 0)
+    $('.d-appendix').remove();
+
+  // prepend separator above appendix
+  $('.d-appendix').before($('<hr class="section-separator" style="clear: both"/>'));
+
+  // trim code
+  $('pre>code').each(function(i, val) {
+    $(this).html($.trim($(this).html()));
+  });
+
+  // move posts-container right before article
+  $('.posts-container').insertBefore($('.d-article'));
+
+  $('body').addClass('downlevel');
+
+  on_load_complete();
+}
+
+
+function init_common() {
+
+  // jquery plugin to change element types
+  (function($) {
+    $.fn.changeElementType = function(newType) {
+      var attrs = {};
+
+      $.each(this[0].attributes, function(idx, attr) {
+        attrs[attr.nodeName] = attr.nodeValue;
+      });
+
+      this.replaceWith(function() {
+        return $("<" + newType + "/>", attrs).append($(this).contents());
+      });
+    };
+  })(jQuery);
+
+  // prevent underline for linked images
+  $('a > img').parent().css({'border-bottom' : 'none'});
+
+  // mark non-body figures created by knitr chunks as 100% width
+  $('.layout-chunk').each(function(i, val) {
+    var figures = $(this).find('img, .html-widget');
+    if ($(this).attr('data-layout') !== "l-body") {
+      figures.css('width', '100%');
+    } else {
+      figures.css('max-width', '100%');
+      figures.filter("[width]").each(function(i, val) {
+        var fig = $(this);
+        fig.css('width', fig.attr('width') + 'px');
+      });
+
+    }
+  });
+
+  // auto-append index.html to post-preview links in file: protocol
+  // and in rstudio ide preview
+  $('.post-preview').each(function(i, val) {
+    if (window.location.protocol === "file:")
+      $(this).attr('href', $(this).attr('href') + "index.html");
+  });
+
+  // get rid of index.html references in header
+  if (window.location.protocol !== "file:") {
+    $('.distill-site-header a[href]').each(function(i,val) {
+      $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+    });
+  }
+
+  // add class to pandoc style tables
+  $('tr.header').parent('thead').parent('table').addClass('pandoc-table');
+  $('.kable-table').children('table').addClass('pandoc-table');
+
+  // add figcaption style to table captions
+  $('caption').parent('table').addClass("figcaption");
+
+  // initialize posts list
+  if (window.init_posts_list)
+    window.init_posts_list();
+
+  // implmement disqus comment link
+  $('.disqus-comment-count').click(function() {
+    window.headroom_prevent_pin = true;
+    $('#disqus_thread').toggleClass('hidden');
+    if (!$('#disqus_thread').hasClass('hidden')) {
+      var offset = $(this).offset();
+      $(window).resize();
+      $('html, body').animate({
+        scrollTop: offset.top - 35
+      });
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (is_downlevel_browser())
+    init_downlevel();
+  else
+    window.addEventListener('WebComponentsReady', init_distill);
+});
+
+</script>
+
+<!--/radix_placeholder_distill-->
+  <script src="../../site_libs/twitter-widget-0.0.1/widgets.js"></script>
+  <script src="../../site_libs/jquery-1.11.3/jquery.min.js"></script>
+  <script src="../../site_libs/bowser-1.9.3/bowser.min.js"></script>
+  <script src="../../site_libs/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="../../site_libs/distill-2.2.21/template.v2.js"></script>
+  <!--radix_placeholder_site_in_header-->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    if (!/posts/.test(location.pathname)) {
+      return;
+    }
+
+    var script = document.createElement("script");
+    script.src = "https://utteranc.es/client.js";
+    script.setAttribute("repo", "taraskaduk/taraskaduk-distill");
+    script.setAttribute("issue-term", "og:title");
+    script.setAttribute("crossorigin", "anonymous");
+    script.setAttribute("label", "comment_thread");
+
+    /* wait for article to load, append script to article element */
+    var observer = new MutationObserver(function (mutations, observer) {
+      var article = document.querySelector("d-article");
+      if (article) {
+        observer.disconnect();
+        /* HACK: article scroll */
+        article.setAttribute("style", "overflow-y: hidden");
+        article.appendChild(script);
+      }
+    });
+
+    observer.observe(document.body, { childList: true });
+  });
+</script>
+
+<style type="text/css">
+/* Import fonts from Google's API */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono');
+@import url('https://fonts.googleapis.com/css2?family=Lato');
+@import url('https://fonts.googleapis.com/css2?family=Raleway');
+@import url('https://fonts.googleapis.com/css2?family=Lusitana');
+
+
+
+body {
+  font-family: "Raleway";
+}
+
+.distill-site-nav {
+    color: #000;
+    background-color: #fff;
+    font-size: 18px;
+}
+
+.distill-site-nav a:hover {
+    color: #56638c;
+}
+
+d-title h1 {
+    font-weight: 500;
+    font-size: 40px;
+}
+
+
+/*
+.distill-site-nav {
+    font-family: 'Raleway', sans-serif;
+    color: #000;
+    background-color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.distill-site-header {
+    font-family: 'Raleway', sans-serif;
+    color: #000;
+    background-color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.distill-site-nav a:hover {
+    color: #56638c;
+}
+
+.categories li > a:hover {
+    color: #56638c;
+    border-bottom: 1px #56638c;
+}
+
+p a:hover  {
+    color: #56638c;
+}
+
+
+h1 {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 600;
+}
+
+h2, h3, h4, h5 {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 500;
+}
+
+
+html, body, p {
+    font-family: 'Lusitana', serif;
+    line-height: 2; 
+}
+
+.posts-list .description p {
+    font-family: 'Roboto Mono', serif !important;
+    color: gray !important;
+}
+
+.posts-list .description h2 {
+    font-family: 'Raleway', sans-serif !important;
+}
+*/
+
+th, td { 
+    font-family: 'Roboto Mono';
+  }
+    
+</style>
+<!--/radix_placeholder_site_in_header-->
+
+
+</head>
+
+<body>
+
+<!--radix_placeholder_front_matter-->
+
+<script id="distill-front-matter" type="text/json">
+{"title":"Power Query: Excel's gateway to reproducible analysis","description":"Review of Power Query's scripting language as a way to evangelize reproducible data analysis and programming with minimal learning investment","authors":[{"author":"Taras Kaduk","authorURL":"https://taraskaduk.com","affiliation":"&nbsp;","affiliationURL":"#"}],"publishedDate":"2018-03-29T00:00:00.000-04:00","citationText":"Kaduk, 2018"}
+</script>
+
+<!--/radix_placeholder_front_matter-->
+<!--radix_placeholder_navigation_before_body-->
+<header class="header header--fixed" role="banner">
+<nav class="distill-site-nav distill-site-header">
+<div class="nav-left">
+<span class="logo">
+<img src="../../static/logo.png"/>
+</span>
+<a href="../../index.html" class="title">Taras Kaduk</a>
+</div>
+<div class="nav-right">
+<a href="../../index.html">Home</a>
+<a href="../../about.html">About</a>
+<a href="../../talks.html">Talks</a>
+<a href="../../index.xml">
+<i class="fa fa-rss" aria-hidden="true"></i>
+</a>
+<a href="https://github.com/taraskaduk">
+<i class="fa fa-github" aria-hidden="true"></i>
+</a>
+<a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
+</div>
+</nav>
+</header>
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="d-title">
+<h1>Power Query: Excel’s gateway to reproducible analysis</h1>
+<p>Review of Power Query’s scripting language as a way to evangelize reproducible data analysis and programming with minimal learning investment</p>
+</div>
+
+<div class="d-byline">
+  Taras Kaduk <a href="https://taraskaduk.com" class="uri">https://taraskaduk.com</a> 
+  
+<br/>2018-03-29
+</div>
+
+<div class="d-article">
+<div class="layout-chunk" data-layout="l-body-outset">
+<p><img src="cover.png" width="730" data-distill-preview=1 /></p>
+</div>
+<h2 id="intro">Intro</h2>
+<p>In this blog post, I’ll try to highlight some of Excel’s functionality which have been around for a while, but remains largely unknown to the broad public.</p>
+<p>Now, I’ll be the first one to throw rocks at the Excel camp. I’ve got receipts:</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">Please don&#39;t... <a href="https://t.co/r3j3KQtcCT">pic.twitter.com/r3j3KQtcCT</a></p>&mdash; Taras Kaduk (@taraskaduk) <a href="https://twitter.com/taraskaduk/status/962376095323643910?ref_src=twsrc%5Etfw">February 10, 2018</a></blockquote>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">My analysis is in Excel. <a href="https://twitter.com/hashtag/Loseyourjobin5words?src=hash&amp;ref_src=twsrc%5Etfw">#Loseyourjobin5words</a></p>&mdash; Taras Kaduk (@taraskaduk) <a href="https://twitter.com/taraskaduk/status/970708905251737605?ref_src=twsrc%5Etfw">March 5, 2018</a></blockquote>
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">Reproducible analysis, case in point. A colleague from another department is out. People come to me w/ requests to recreate some analysis that person did. I have no idea, but OK, let&#39;s see. <br>Colleague&#39;s analysis is in Excel. How can I reproduce it? <br>No analysis for you! <a href="https://t.co/SoXZO10ekG">pic.twitter.com/SoXZO10ekG</a></p>&mdash; Taras Kaduk (@taraskaduk) <a href="https://twitter.com/taraskaduk/status/935263135413555203?ref_src=twsrc%5Etfw">November 27, 2017</a></blockquote>
+</p>
+</div>
+<p>However, I’ll also be the first to jump in Excel’s defense whenever an opportunity presents itself:</p>
+<div class="layout-chunk" data-layout="l-body">
+<blockquote class="twitter-tweet" data-width="550" data-lang="en" data-dnt="true" data-theme="light"><p lang="en" dir="ltr">Generally a very good article on advantages of R, but as always - completely overlooking Excel enhancements that came with Power Query and Power Pivot (e.g. scripting, hundreds of data connectors. I.e. all the Power BI functionality)<a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/hashtag/PowerBI?src=hash&amp;ref_src=twsrc%5Etfw">#PowerBI</a> <a href="https://t.co/k3qj8px81b">https://t.co/k3qj8px81b</a></p>&mdash; Taras Kaduk (@taraskaduk) <a href="https://twitter.com/taraskaduk/status/946035002571218944?ref_src=twsrc%5Etfw">December 27, 2017</a></blockquote>
+
+</div>
+<p>What gives? I generally agree that Excel is a bad way to conduct an analysis. Having said that, there are many enhancements to the product (Windows version mainly) that came out over the last 10 years which are completely overlooked by both Excel users and Excel bashers. One of such enhancements, Power Query (or Query Editor, or M language), allows for a reproducible data import and transformation, and is quite easy to learn. That will be this post’s topic.</p>
+<h3 id="what-this-post-isnt-about">What this post isn’t about</h3>
+<ul>
+<li>Excel cell formulas</li>
+<li>VBA</li>
+<li>Power Pivot and data modeling</li>
+<li>DAX and Excel / Power BI measures</li>
+<li>Power Query’s and M’s history</li>
+<li>full functionality of Power Query</li>
+<li>Excel on a Mac</li>
+</ul>
+<h3 id="the-audience">The audience</h3>
+<p>This post isn’t a guide to using Excel’s and Power BI’s Power Query. This post is not for people who want to learn new cool tricks of Excel.</p>
+<p>This post is for data scientists and analysts who put reproducible analysis (achieved via programming one’s analysis in R or Python) at the center of what they do. This post is for people who like to use Excel as a punching bag (and again, I am one of those people).</p>
+<p>Lastly, this post is for those analysts stuggling to switch the workflow at their place of work from Excel to R or Python. I think that Power Query could act as a gateway drug to reproducible analysis. Meet them where they’re at (in Excel), and guide them by hand out into the world of “programming your analysis”.</p>
+<h2 id="power-query">Power Query</h2>
+<p>Power Query, a.k.a. Data Explorer, a.k.a. Query Editor is Microsoft’s module within Excel and Power BI which allows users to perform data import and transformations before loading the ready tables into a workbook. It’s been around since 2013. Google for more information.</p>
+<h3 id="components">Components</h3>
+<p>In the simplest terms possible, I could break the Power Query down into two parts: the language and the GUI.</p>
+<h4 id="the-m-language">The M language</h4>
+<p>From <a href="https://msdn.microsoft.com/en-us/library/mt211003.aspx">MSDN</a>:</p>
+<blockquote>
+<p>The Power Query M formula language is optimized for building highly flexible data mashup queries. It’s a functional, case sensitive language similar to F#</p>
+</blockquote>
+<p>In simpler terms, it is a data transformation language. Now, I’m not a computer scientist, and won’t be able to explain all the technical details well, therefore I suggest that the most interested ones go and check out the <a href="https://msdn.microsoft.com/en-us/library/mt807488.aspx">Power Query M language specification</a>. For the rest of us, I’ll just say that M works by calling a function on a table or a list, then storing this result as a new table, and then calling this new table in the next step with another function. That is oversimplification, of course, but for the purpose of this post, it should do.</p>
+<h5 id="example-1">Example 1</h5>
+<p>Let me explain it on an example. In Excel, I created sample table of 3 rows and 3 columns called <code>df</code>. <img src="test1.png" /></p>
+<p>I then loaded it into the query editor, and pressed a few buttons. Here is the code it generated (I edited the step names and indented the lines):</p>
+<pre><code>
+let
+    Source = Excel.CurrentWorkbook(){[Name=&quot;df&quot;]}[Content],
+    change_type = Table.TransformColumnTypes(Source,
+                                            {
+                                              {&quot;a&quot;, Int64.Type}, 
+                                              {&quot;b&quot;, Int64.Type}, 
+                                              {&quot;c&quot;, Int64.Type}
+                                            }),
+    filter = Table.SelectRows(change_type, each ([a] &lt;&gt; 7)),
+    remove_cols = Table.RemoveColumns(filter,{&quot;c&quot;})
+in
+    remove_cols</code></pre>
+<p>The final output will look like this: <img src="test2.png" /></p>
+<p>The first step, <code>Source</code>, is our import step. It tells Power Query where to find our table. The second step, <code>change_type"</code>, is auto-generated. Notice that it references the first step as the first argument of the function <code>Table.TransformColumnTypes</code>: it says <em>“that’s the table we will work with”</em>. All this step does is assigns columns a, b and c the type of integer. Next step, <code>filter</code>, references the previous step, and performs a filter operation. Finally, <code>remove_cols</code> takes the result of the previous step, and then removes a column. Then, the code tells Power Query that the result of <code>remove_cols</code> is the one to be printed.</p>
+<p>This is a very basic explanation of how this code works. You can twist it, bend it to your will, skip steps, branch out, use parameters etc. But the common functionally is this stitched <em>freight train</em>-like sequence of steps.</p>
+<h5 id="example-2">Example 2</h5>
+<p>Here is the data transformation sample from <a href="https://twitter.com/drob">David Robinson’s</a> <a href="https://campus.datacamp.com/courses/introduction-to-the-tidyverse/data-wrangling-1?ex=12">DataCamp course on the tidyverse</a></p>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<p>I hope I don’t need to read to you what it does (if you can’t read the code, try running it. If you have no idea what’s going on here - I suggest taking the above-mentioned David’s class on the tidyverse)</p>
+<p>Here is how I’d solve the same simple task in Power Query. First, Power Query in Excel, unlike Power Query in Power BI, can’t run R scripts, therefore I can’t just load a package. But Power Query can read <code>.RData</code> files. It can also load stuff from the web. We’ll do just that</p>
+<pre><code>
+let
+    Source = Web.Page(
+                Web.Contents(&quot;https://github.com/jennybc/gapminder/blob/master/inst/extdata/gapminder.tsv&quot;)),
+    Data = Source{0}[Data],
+    col_types = Table.TransformColumnTypes(Data,{
+                                                  {&quot;&quot;, type text}, 
+                                                  {&quot;country&quot;, type text}, 
+                                                  {&quot;continent&quot;, type text}, 
+                                                  {&quot;year&quot;, Int64.Type}, 
+                                                  {&quot;lifeExp&quot;, type number}, 
+                                                  {&quot;pop&quot;, Int64.Type}, 
+                                                  {&quot;gdpPercap&quot;, type number}
+                                                }),
+    filter = Table.SelectRows(col_types, each ([year] = 2007)),
+    mutate = Table.AddColumn(filter, &quot;lifeExpMonths&quot;, each [lifeExp] * 12, type number),
+    arrange = Table.Sort(mutate,{{&quot;lifeExpMonths&quot;, Order.Descending}})
+in
+    arrange</code></pre>
+<p>Now, again, I changed the names of the steps and indented the code for readability purposes. The rest was generated by Power Query and I was just clicking on things. I want to stress it out again: <strong>I didn’t have to know any of the functions, any of the syntax</strong>. All I did was:</p>
+<ul>
+<li>Pass a web link into GUI.</li>
+<li>From there, Power Query figured out that it needed a combo of <code>Web.Page(Web.Contents())</code> to get to the data. It saw a table and guessed column types for me.</li>
+<li>From here, I clicked on the “year” column header to filter it, clicked a button to create a new column out of the old one, and the clicked on its header to sort in descending order.</li>
+</ul>
+<p>In other words, <em>I came to this with no pre-existing knowledge of coding, and got myself a reproducible piece of code</em>. The data refreshes upon each load: Excel will be checking Jenny’s GitHub page every time we refresh the data, and will be applying the steps as documented.</p>
+<h3 id="the-gui">The GUI</h3>
+<p>As you may have guessed from my previous paragraph, the Query Editor GUI is bread and butter of this whole scheme: the M language itself is hard to type by hand, the functions are long, it is case sensitive, and there is no good source code editor (Notepad++ and other text editors do a better job than the Power Query itself). But I feel like Power Query wasn’t built to program in: that’s not the main customer base of Excel and Power BI. What Power Query is good at is its GUI that allows users to click around and apply data transformation steps, all the while generating a script behind the scenes.</p>
+<p>First, there is a ribbon with several tabs and plenty of buttons to click on. Some represent very simple existing functions, while others are pretty complicated and generate a solid chunk of code on just one click.</p>
+<p><img src="1.png" /> <img src="2.png" /> <img src="3.png" /></p>
+<p>Next, you are allowed to interact with your data to some extend. You can’t edit any cells, but you can filter columns, move them around, fill them down, sort, and so on, within the table itself. Power Query will pick up on your actions and will save your transformations in a script.</p>
+<p><img src="gui1.png" /> <img src="gui2.png" /></p>
+<p>You can have more than one query, coming from different sources, and you can make them interact with each other: merge (join), append (union), reference, split, nest and so on.</p>
+<p>You can also re-arrange the query steps in the GUI via simple drag-n-drop, and your script will be re-written to reflect the new order.</p>
+<h2 id="what-i-like-about-power-query">What I like about Power Query</h2>
+<p>There are quite a few things I like about Power Query:</p>
+<ul>
+<li><strong>Learning curve.</strong> It’s easy to get started with Power Query and create functional reproducible scripts out of the gate. The powerful GUI allows for that. No setup necessary: no installation, fine tuning, no ODBC drivers and connections. It just works out of the box. Almost like it wasn’t Microsoft creating it.</li>
+<li><strong>Accessing data.</strong> Getting the data is the most seamless experience I’ve had. It has pre-built functions for many data sources (I’ve got receipts: <a href="https://msdn.microsoft.com/en-US/library/mt296615.aspx">here is the list of functions</a>), and can recognize a large amount of data formats. It doesn’t require any ODBC setup. The Power Query flavor that runs on Power BI can also use <strong>R scripts</strong> as a data source or a data step, yet this functionality isn’t a part of Excel yet.</li>
+<li><strong>Tidy-like data storage and display.</strong> Surprised? Yeah, with a few exceptions, Power Query treats everything as a data frame. What if it’s not a data frame? Then it tries to fit the data into a rectangular shape. I’d like to show a few examples.</li>
+</ul>
+<p>Here is an example of how Power Query treats JSON files. I used the well-known (thanks to Jenny Bryan’s tutorials!) <a href="https://anapioficeandfire.com/">API of Ice and Fire</a>. Here is what I’ve got after a few clicks. Note that I only plugged in the API call as a URL - Power Query did the rest.</p>
+<p><img src="got-1.png" /> It is a data frame, but it has a nested list column for titles. Neat!</p>
+<p>Not only JSON records get nested. You could have a nested table (can happen upon a join or after a <code>group_by</code>-like call), or a nested list. Regardless, Power Query will always try to make your data rectangular, which is pleasing to any <code>tidyverse</code> adept. Here is another example. I took the same Gapminder dataset, and nested it, grouping by <code>country</code>. The table above is now how Power Query sees the table. The data frame below is a sneak peek into one of the nested cells for the United Kingdom. The function up on top is the step I applied to nest the data frame:</p>
+<p><img src="gui4.png" /></p>
+<p>One more example. Here is how Power Query sees a folder full of files:</p>
+<p><img src="gui5.png" /></p>
+<p>Likewise, if you told Power Query to access a database, and didn’t specify SQL statement, it would return a data frame of all tables and views in that database, and you can take it from there.</p>
+<ul>
+<li><em>Robust GUI that keeps the code.</em> Another cool feature is that the GUI can handle 90% of one’s needs, and it scripts all transformations behind the scenes. I think of it as a gateway drug to <em>“programming one’s analysis”</em></li>
+</ul>
+<h2 id="what-i-dont-like-about-power-query">What I don’t like about Power Query</h2>
+<ul>
+<li><strong>Speed.</strong> It is unbelievably slow. I guess the convenience comes at a cost of performance. It does well on small datasets and simpler operations, but fails to do a decent job the moment you scale.</li>
+<li><strong>Syntax and flexibility.</strong> The language is rather rigid, and the syntax is annoying at times.</li>
+<li><strong>Limits.</strong> It can only do so much. You can import and transform the data, but you can’t do anything else here.</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>What we have these days is several generations of knowledge workers trained on doing their analysis in Excel. Just bashing the tool is not productive. We think we provide better alternatives with R or Python, but we frequently forget about the learning curve associated not only with learning a new language, but also with learning <strong>a language</strong> for the first time. Excel’s Power Query could serve as an important stepping stone in taking the analysis out of the Wild West world of Excel VLOOKUPs into the world of reproducible code, git repos and other warm and fuzzy things.</p>
+<!--radix_placeholder_article_footer-->
+<!--/radix_placeholder_article_footer-->
+</div>
+
+<div class="d-appendix">
+</div>
+
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_appendices-->
+<div class="appendix-bottom">
+  <h3 id="reuse">Reuse</h3>
+  <p>Text and figures are licensed under Creative Commons Attribution <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. The figures that have been reused from other sources don't fall under this license and can be recognized by a note in their caption: "Figure from ...".</p>
+  <h3 id="citation">Citation</h3>
+  <p>For attribution, please cite this work as</p>
+  <pre class="citation-appendix short">Kaduk (2018, March 29). Taras Kaduk: Power Query: Excel's gateway to reproducible analysis. Retrieved from https://taraskaduk.com/posts/2018-03-29-power-query/</pre>
+  <p>BibTeX citation</p>
+  <pre class="citation-appendix long">@misc{kaduk2018power,
+  author = {Kaduk, Taras},
+  title = {Taras Kaduk: Power Query: Excel's gateway to reproducible analysis},
+  url = {https://taraskaduk.com/posts/2018-03-29-power-query/},
+  year = {2018}
+}</pre>
+</div>
+<!--/radix_placeholder_appendices-->
+<!--radix_placeholder_navigation_after_body-->
+<!--/radix_placeholder_navigation_after_body-->
+
+</body>
+
+</html>

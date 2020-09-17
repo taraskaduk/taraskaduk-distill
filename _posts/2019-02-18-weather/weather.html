@@ -1010,9 +1010,7 @@
 
 </div>
 <p>Specific to the United States, the map shows that areas of most pleasant weather include the West Coast and Florida.</p>
-<div class="layout-chunk" data-layout="l-body-outset">
-<p><img src="map.png" width="1800" data-distill-preview=1 /></p>
-</div>
+<p><img src="map.png" /></p>
 <h3 id="best-and-worst">50 best and worst</h3>
 <p>Moving on to the rankings. Below is the chart design I settled on. Each chart shows 50 metropolitan and/or micropolitan areas, ranked by their average amount of pleasant days in years 2012-2017. The year 2017 is displayed for each area as a tile chart: months on y-axis, days of the month on x-axis. Areas are sorted according to the chart: from most to least in “most pleasant days”, and from least to most in “least pleasant days”: the most winner or loser is always on top</p>
 <h4 id="top-50-best-all-metropolitan-and-micropolitan">Top 50 best, all metropolitan and micropolitan</h4>
@@ -1027,7 +1025,9 @@
 <p><img src="50_least_M1_5_cols_.png" /></p>
 <h3 id="top-25-best-and-worst-metro-areas-with-population-over-1000000-people">Top 25 best and worst metro areas with population over 1,000,000 people</h3>
 <p>Finally, I ranked the biggest metro areas - the ones with the population over 1 million - in the same way. Here are 25 best and worst metro areas with over 1,000,000 people. This time, I used a different design, displaying all 6 years per metro area as “tree rings”, using polar coordinates</p>
-<p><img src="25_most_1000_polar_.png" /></p>
+<div class="layout-chunk" data-layout="l-body-outset">
+<p><img src="25_most_1000_polar_.png" width="1800" data-distill-preview=1 /></p>
+</div>
 <p><img src="25_least_1000_polar_.png" /></p>
 <h2 id="discussion">Discussion</h2>
 <p>I feel very good about letting these imperfect charts out into the wild. Mostly, I feel liberated to be able to move on and do other things. Funny enough, one of these “other things” is to re-do this analysis, but keep it simpler and rely on existing packages rather than reinventing the wheel. Why re-do? Well, I still want to work on this project <strong>“Best place to live”</strong>, and weather is one important metric out of many. But this time around, I won’t need all the precision, all the complexity, all the <code>ggplot</code> wizardry: I’ll just accept a simple and somewhat imperfect metric as a proxy, as it will be one of many other numbers. So, stay tuned!</p>

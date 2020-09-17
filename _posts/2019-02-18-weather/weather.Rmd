@@ -50,9 +50,7 @@ tweet_embed("https://twitter.com/taraskaduk/status/1008879318502604800")
 
 Specific to the United States, the map shows that areas of most pleasant weather include the West Coast and Florida.
 
-```{r echo=FALSE, layout="l-body-outset", preview=TRUE}
-knitr::include_graphics("map.png")
-```
+![](map.png)
 
 ### 50 best and worst
 Moving on to the rankings. Below is the chart design I settled on. Each chart shows 50 metropolitan and/or micropolitan areas, ranked by their average amount of pleasant days in years 2012-2017. The year 2017 is displayed for each area as a tile chart: months on y-axis, days of the month on x-axis. Areas are sorted according to the chart: from most to least in "most pleasant days", and from least to most in "least pleasant days": the most winner or loser is always on top
@@ -84,7 +82,9 @@ Over on the other side, not so pleasant places still include Puerto Rico and the
 Finally, I ranked the biggest metro areas  - the ones with the population over 1 million - in the same way.
 Here are 25 best and worst metro areas with over 1,000,000 people. This time, I used a different design, displaying all 6 years per metro area as "tree rings", using polar coordinates 
 
-![](25_most_1000_polar_.png)
+```{r echo=FALSE, layout="l-body-outset", preview=TRUE}
+knitr::include_graphics("25_most_1000_polar_.png")
+```
 
 ![](25_least_1000_polar_.png)
 

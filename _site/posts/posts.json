@@ -18,6 +18,42 @@
     "preview_height": 2100
   },
   {
+    "path": "posts/2019-10-23-is-rock-dying/",
+    "title": "Is Rock Dying?",
+    "description": "A quantitative comparison of artists in the Billboard 200 charts 1963 - 2018. A comparison of rock and hip-hop artists show a decline of the former and the rise of the latter",
+    "author": [
+      {
+        "name": "Taras Kaduk",
+        "url": "https://taraskaduk.com"
+      }
+    ],
+    "date": "2019-10-23",
+    "categories": [],
+    "preview": "posts/2019-10-23-is-rock-dying/1.png",
+    "last_modified": "2020-09-16T20:37:45-04:00",
+    "input_file": {},
+    "preview_width": 2483,
+    "preview_height": 2391
+  },
+  {
+    "path": "posts/2019-03-23-apple-health/",
+    "title": "Analyze and visualize your iPhone's Health app data in R",
+    "description": "Learn to import, analyze and visualize your Health app data in R",
+    "author": [
+      {
+        "name": "Taras Kaduk",
+        "url": "https://taraskaduk.com"
+      }
+    ],
+    "date": "2019-03-23",
+    "categories": [],
+    "preview": "posts/2019-03-23-apple-health/energy2.png",
+    "last_modified": "2020-09-16T20:27:56-04:00",
+    "input_file": {},
+    "preview_width": 2400,
+    "preview_height": 1800
+  },
+  {
     "path": "posts/2019-02-18-weather/",
     "title": "Where are the places with the best (and the worst) weather in the United States?",
     "description": "Using NOAA GSOD data in determining the amount of pleasant days in USA's core-based statistical areas",
@@ -29,11 +65,29 @@
     ],
     "date": "2019-02-18",
     "categories": [],
-    "preview": "posts/2019-02-18-weather/map.png",
-    "last_modified": "2020-09-09T15:55:56-04:00",
+    "preview": "posts/2019-02-18-weather/25_most_1000_polar_.png",
+    "last_modified": "2020-09-16T20:24:08-04:00",
     "input_file": {},
     "preview_width": 3600,
-    "preview_height": 2400
+    "preview_height": 3300
+  },
+  {
+    "path": "posts/2018-03-29-power-query/",
+    "title": "Power Query: Excel's gateway to reproducible analysis",
+    "description": "Review of Power Query's scripting language as a way to evangelize reproducible data analysis and programming with minimal learning investment",
+    "author": [
+      {
+        "name": "Taras Kaduk",
+        "url": "https://taraskaduk.com"
+      }
+    ],
+    "date": "2018-03-29",
+    "categories": [],
+    "preview": "posts/2018-03-29-power-query/cover.png",
+    "last_modified": "2020-09-16T20:24:02-04:00",
+    "input_file": {},
+    "preview_width": 1461,
+    "preview_height": 789
   },
   {
     "path": "posts/2017-11-26-pixel-maps/",

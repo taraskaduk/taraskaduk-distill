@@ -18,13 +18,40 @@
       <media:content url="https://taraskaduk.com/posts/2019-11-11-excess-degree-days/edd_heat.png" medium="image" type="image/png" width="2700" height="2100"/>
     </item>
     <item>
+      <title>Is Rock Dying?</title>
+      <dc:creator>Taras Kaduk</dc:creator>
+      <link>https://taraskaduk.com/posts/2019-10-23-is-rock-dying</link>
+      <description>A quantitative comparison of artists in the Billboard 200 charts 1963 - 2018. A comparison of rock and hip-hop artists show a decline of the former and the rise of the latter</description>
+      <guid>https://taraskaduk.com/posts/2019-10-23-is-rock-dying</guid>
+      <pubDate>Wed, 23 Oct 2019 00:00:00 +0000</pubDate>
+      <media:content url="https://taraskaduk.com/posts/2019-10-23-is-rock-dying/1.png" medium="image" type="image/png" width="2483" height="2391"/>
+    </item>
+    <item>
+      <title>Analyze and visualize your iPhone's Health app data in R</title>
+      <dc:creator>Taras Kaduk</dc:creator>
+      <link>https://taraskaduk.com/posts/2019-03-23-apple-health</link>
+      <description>Learn to import, analyze and visualize your Health app data in R</description>
+      <guid>https://taraskaduk.com/posts/2019-03-23-apple-health</guid>
+      <pubDate>Sat, 23 Mar 2019 00:00:00 +0000</pubDate>
+      <media:content url="https://taraskaduk.com/posts/2019-03-23-apple-health/energy2.png" medium="image" type="image/png" width="2400" height="1800"/>
+    </item>
+    <item>
       <title>Where are the places with the best (and the worst) weather in the United States?</title>
       <dc:creator>Taras Kaduk</dc:creator>
       <link>https://taraskaduk.com/posts/2019-02-18-weather</link>
       <description>Using NOAA GSOD data in determining the amount of pleasant days in USA's core-based statistical areas</description>
       <guid>https://taraskaduk.com/posts/2019-02-18-weather</guid>
       <pubDate>Mon, 18 Feb 2019 00:00:00 +0000</pubDate>
-      <media:content url="https://taraskaduk.com/posts/2019-02-18-weather/map.png" medium="image" type="image/png" width="3600" height="2400"/>
+      <media:content url="https://taraskaduk.com/posts/2019-02-18-weather/25_most_1000_polar_.png" medium="image" type="image/png" width="3600" height="3300"/>
+    </item>
+    <item>
+      <title>Power Query: Excel's gateway to reproducible analysis</title>
+      <dc:creator>Taras Kaduk</dc:creator>
+      <link>https://taraskaduk.com/posts/2018-03-29-power-query</link>
+      <description>Review of Power Query's scripting language as a way to evangelize reproducible data analysis and programming with minimal learning investment</description>
+      <guid>https://taraskaduk.com/posts/2018-03-29-power-query</guid>
+      <pubDate>Thu, 29 Mar 2018 00:00:00 +0000</pubDate>
+      <media:content url="https://taraskaduk.com/posts/2018-03-29-power-query/cover.png" medium="image" type="image/png" width="1461" height="789"/>
     </item>
     <item>
       <title>Create World Pixel Maps in R</title>
