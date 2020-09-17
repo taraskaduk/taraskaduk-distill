@@ -4,11 +4,14 @@ description: |
   Taras Kaduk
 output_dir: "_site"
 base_url: https://taraskaduk.com
+favicon: static/logo.png
 creative_commons: CC BY
 twitter:
   site: "@taraskaduk"
 navbar:
-  logo: static/logo.png
+  logo: 
+    image: static/logo.png
+    href: https://taraskaduk.com
   right:
     - text: "Home"
       href: index.html
