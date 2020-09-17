@@ -36,9 +36,9 @@
 <meta property="og:type" content="article"/>
 <meta property="og:description" content="Calcualting deviations (excess heat and  excess cold) from an established temperature baseline as area under the temperature curve via integral calculus and expressing such measure as Excess Degree-Days, or EDD."/>
 <meta property="og:url" content="https://taraskaduk.com/posts/2019-11-11-excess-degree-days/"/>
-<meta property="og:image" content="https://taraskaduk.com/posts/2019-11-11-excess-degree-days/edd_heat.png"/>
-<meta property="og:image:width" content="2700"/>
-<meta property="og:image:height" content="2100"/>
+<meta property="og:image" content="https://taraskaduk.com/posts/2019-11-11-excess-degree-days/integral.png"/>
+<meta property="og:image:width" content="3324"/>
+<meta property="og:image:height" content="2670"/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:site_name" content="Taras Kaduk"/>
 
@@ -47,9 +47,9 @@
 <meta property="twitter:title" content="Taras Kaduk: Measuring Excess Degree-Days in the Context of Location Comfort and Liveability"/>
 <meta property="twitter:description" content="Calcualting deviations (excess heat and  excess cold) from an established temperature baseline as area under the temperature curve via integral calculus and expressing such measure as Excess Degree-Days, or EDD."/>
 <meta property="twitter:url" content="https://taraskaduk.com/posts/2019-11-11-excess-degree-days/"/>
-<meta property="twitter:image" content="https://taraskaduk.com/posts/2019-11-11-excess-degree-days/edd_heat.png"/>
-<meta property="twitter:image:width" content="2700"/>
-<meta property="twitter:image:height" content="2100"/>
+<meta property="twitter:image" content="https://taraskaduk.com/posts/2019-11-11-excess-degree-days/integral.png"/>
+<meta property="twitter:image:width" content="3324"/>
+<meta property="twitter:image:height" content="2670"/>
 <meta property="twitter:site" content="@taraskaduk"/>
 
 <!--  https://scholar.google.com/intl/en/scholar/inclusion.html#indexing -->
@@ -1505,7 +1505,9 @@ th, td {
 <p>The calculation of Excess Degree-Hours (or <span class="math inline">\(EDH\)</span> for short) for the general case where the temperature curve crosses the baseline two times on a given day can be notated as:</p>
 <p><span class="math display">\[EDH = \int_{0}^{\theta_1} (g(\theta) - f(\theta)) d\theta + \int_{\theta_1}^{\theta_2} (f(\theta) - g(\theta)) d\theta + \int_{\theta_2}^{24} (g(\theta) - f(\theta)) d\theta\]</span></p>
 <p>where <span class="math inline">\(\theta\)</span> is time, <span class="math inline">\(f(\theta)\)</span> is our cosine function, <span class="math inline">\(g(\theta) = 18°C\)</span> (the baseline), and <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span> are the times at which the temperature curve crosses the baseline.</p>
-<p><img src="integral.png" /></p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="integral.png" width="1662" data-distill-preview=1 /></p>
+</div>
 <p>The area above the baseline stands for excess heat degree-days, and the area below the baseline - for excess cold degree-days. The sum of absolute values of both hot and cold areas will represent the total excess degree-days.</p>
 <p>The cases when the curve stays completely above or below the baseline are special cases that require only one of the three integrals.</p>
 <p>To get Excess Degree-Days (<span class="math inline">\(EDD\)</span>), the <span class="math inline">\(EDH\)</span> needs to be divided by 24: <span class="math display">\[ EDD = \frac{EDH}{24}\]</span></p>
