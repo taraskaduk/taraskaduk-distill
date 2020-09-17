@@ -25,6 +25,7 @@
 
 <link rel="canonical" href="https://taraskaduk.com/posts/2017-09-30-mpaa/"/>
 <link rel="license" href="https://creativecommons.org/licenses/by/4.0/"/>
+<link rel="icon" type="image/png" href="../../static/logo.png"/>
 
 <!--  https://schema.org/Article -->
 <meta property="article:published" itemprop="datePublished" content="2017-09-30"/>
@@ -1311,7 +1312,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     /* wait for article to load, append script to article element */
     var observer = new MutationObserver(function (mutations, observer) {
-      var article = document.querySelector("d-article");
+      var article = document.querySelector("d-appendix");
       if (article) {
         observer.disconnect();
         /* HACK: article scroll */
@@ -1433,9 +1434,9 @@ th, td {
 <header class="header header--fixed" role="banner">
 <nav class="distill-site-nav distill-site-header">
 <div class="nav-left">
-<span class="logo">
-<img src="../../static/logo.png"/>
-</span>
+<a class="logo" href="https://taraskaduk.com">
+<img src="../../static/logo.png" alt="Logo"/>
+</a>
 <a href="../../index.html" class="title">Taras Kaduk</a>
 </div>
 <div class="nav-right">
