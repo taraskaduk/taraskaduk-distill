@@ -5,7 +5,6 @@ description: |
 output_dir: "_site"
 base_url: https://taraskaduk.com
 favicon: static/logo.png
-creative_commons: CC BY
 twitter:
   site: "@taraskaduk"
 navbar:
@@ -19,6 +18,8 @@ navbar:
       href: about.html
     - text: "Talks"
       href: talks.html
+    - text: "Resume"
+      href: resume.html
     - icon: fa fa-rss
       href: index.xml
     - icon: fa fa-github

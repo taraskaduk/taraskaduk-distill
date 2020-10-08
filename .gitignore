@@ -39,3 +39,8 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+
+# Large files
+./_posts/2020-10-12-uber-movement-kyiv/data/kyiv_speeds_2020.RDS
+./_posts/2020-10-12-uber-movement-kyiv/data/kyiv.geojson

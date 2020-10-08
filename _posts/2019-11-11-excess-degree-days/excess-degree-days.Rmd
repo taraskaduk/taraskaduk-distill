@@ -1,6 +1,6 @@
 ---
 title: "Measuring Excess Degree-Days in the Context of Location Comfort and Liveability"
-description: Calcualting deviations (excess heat and  excess cold) from an established temperature baseline as area under the temperature curve via integral calculus and expressing such measure as Excess Degree-Days, or EDD.
+description: "Calcualting deviations (excess heat and  excess cold) from an established temperature baseline as area under the temperature curve via integral calculus and expressing such measure as Excess Degree-Days, or EDD."
 slug: excess-degree-days
 author:
   - name: Taras Kaduk
