@@ -16,6 +16,8 @@ navbar:
       href: index.html
     - text: "About"
       href: about.html
+    - text: "Geospatial work"
+      href: geo.html
     - text: "Talks"
       href: talks.html
     - text: "Resume"
