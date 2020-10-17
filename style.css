@@ -53,8 +53,8 @@ html, body, p {
 
 .posts-list .description p {
     font-family: 'Roboto Condensed', serif !important;
-    font-weight: 300;
-    font-weight: lighter;
+    font-weight: 200;
+    font-weight: lighter !important;
     color: #32425D !important;
 }
 
