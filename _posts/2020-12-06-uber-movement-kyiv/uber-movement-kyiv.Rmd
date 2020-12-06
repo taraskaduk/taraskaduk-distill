@@ -321,10 +321,47 @@ p_rush <- ggplot()+
         panel.grid.major = element_blank())
 ggsave("temp/rushhour.png", p_rush, width = 9, height = 7, units= "in", dpi = 150)
 
+p_preview <- ggplot()+
+  geom_sf(data=boundary, fill="#34495B")+
+  geom_sf(data = water,
+          fill = "#435D75",
+          # size = .8,
+          lwd = 0) +
+  geom_sf(data= allstreets %>% filter(size>0.2),
+          col="#435D75", size = 0.1) + 
+  geom_sf(data=rush_hour %>% filter(hour==8),
+          aes(geometry = geometry,
+              col=delay_pct), 
+          size=0.2) +
+  scale_colour_viridis_c(
+    labels = scales::percent_format(accuracy = 1),
+    breaks = c(0.25,0.5,1,2.5),
+    #trans = "sqrt",
+    na.value = "grey50",
+    guide = "coloursteps",
+    option = "magma",
+    limits = c(0, 2.5), 
+    oob = scales::squish,
+    direction = -1) +
+
+  labs(title = toupper(paste0("Kyiv city 8:00 traffic delay")),
+       caption = caption,
+       color = "Traffic Delay, %") +
+  facet_wrap(~label) +
+  theme(legend.text = element_text(size = 6),
+        axis.line = element_blank(),
+        axis.text = element_blank(),
+        panel.grid.major = element_blank())
+ggsave("temp/preview.png", p_rush)
 ```
-```{r rush-hour-png, include=TRUE, layout="l-body-outset"}
+```{r rush-hour-png, include=TRUE}
 knitr::include_graphics("temp/rushhour.png")
 ```
+
+```{r preview, preview=TRUE}
+knitr::include_graphics("temp/preview.png")
+```
+
 The pattern here is clear: the heaviest morning traffic at 8:00 is experienced at bridges and main highways moving people from the edges of the city into CBD, while the heaviest evening traffic at 18:00 is concentrated in the city center's, with a literal gridlock of cars trying to get out.
 
 
