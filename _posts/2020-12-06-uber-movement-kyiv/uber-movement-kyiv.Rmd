@@ -1,0 +1,664 @@
+---
+title: "Analysis of Kyiv Road Traffic Using Uber Movement Data"
+description: "This analysis uses Uber Movement speed data to analyze traffic of Kyiv, Ukraine. By looking at the speed data, we are able to find traffic flow's bottlenecks, as well as see the impact of COVID-19-related measures on the city traffic"
+slug: uber-movement-kyiv
+author:
+  - name: Taras Kaduk
+    url: https://taraskaduk.com
+date: 2020-12-06
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 2
+bibliography: bibliography.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = FALSE,
+	message = FALSE,
+	warning = FALSE,
+	include=FALSE,
+	layout="l-body-outset"
+)
+```
+
+```{r libs}
+library(gifski)
+library(sf)
+#library(osmdata)
+library(lubridate)
+library(gganimate)
+library(tidyverse)
+library(extrafont)
+```
+
+```{r theme}
+source(Sys.getenv("THEME"))
+caption <- "Source: Uber Movement\nMethods and analysis: taraskaduk.com"
+```
+
+## Introduction
+The COVID-19 pandemic has impacted many areas of life far beyond human health. It has already had a major impact of economy, ecology, education, technology, finance etc - all too many to enumerate. It will remain a phenomenon that scientists will study for decades to come. 
+
+Among some of the impacted domains is the urban life, and in particular - how do the COVID-19-related restrictions alter city traffic and congestion. Plenty of research in this area has already been done [@romei2020real], [@plumer_traffic_2020], [@geotab_data__analytics_team_impact_2020], [@wang_impact_2020], [@abu-rayash_analysis_2020]. One of the most prominent features of such analyses, however, is that the data used in them is either proprietary, exists behind a paywall or a "freemium"-type arrangement, or is pre-aggregated.
+
+In this article, I will attempt to examine the impact of COVID-19-related restrictions of city traffic using the data that is available for free: [Uber Movement traffic data[(https://movement.uber.com/)
+
+## Data, Materials, Methods
+As mentioned above, for this analysis, I used data provided by Uber Movement [@uber_technologies_inc_uber_2020]. Other data sources, such as [TomTom Historical Traffic Stats](https://www.tomtom.com/products/historical-traffic-stats/), on which more elaborate traffic studies are based [@tomtom_nv_helsinki_2020] [@romei2020real], exists. However, obtaining such data points are often associated with pay walls of "freemium" developer accounts, which is completely understandable, yet which at the same time complicates the progress of citizen data science. 
+
+The benefit of working with Uber Movement data is its free availability. The downside is in the limits of traffic data's availability: at the time of this writing in October 2020, some Uber Movement data is available for only 60 cities worldwide and mostly up through 2020-03-31.
+
+### Initial Data
+Obtaining the data can be done via [NPM Uber Movement Data Toolkit](https://www.npmjs.com/package/movement-data-toolkit), or directly from https://movement.uber.com/ as `.csv` files.
+
+The streets data contains multiple road segments each several meters long and identified by OSM IDs: way ID, start node ID, end node ID. An additional step was taken to only include road segment within administrative city boundaries.
+
+```{r streets-import, cache = TRUE}
+load(url("https://github.com/taraskaduk/kyiv_osm/blob/main/kyiv_osm.RData?raw=true"))
+allstreets <- streets
+streets <- readRDS(url("https://github.com/taraskaduk/uber-movement/blob/master/output/kyiv_streets.RDS?raw=true"))
+
+```
+
+As far as speed data, Uber Movement can provide daily data on an "hour" grain level for the above mentioned road segments. Variables provided are mean speed and speed standard deviation. To summarize, each observation includes mean speed and standard deviation for a particular short road segment on a specific hour of a specific day.
+
+
+```{r speeds, cache.lazy = FALSE, cache=TRUE}
+# Speed data --------------------------------------------------------------
+speeds_delay <- bind_rows(
+  readRDS(url("https://github.com/taraskaduk/uber-movement/blob/master/output/kyiv_speeds_delay_1_1.RDS?raw=true")),
+  readRDS(url("https://github.com/taraskaduk/uber-movement/blob/master/output/kyiv_speeds_delay_1_2.RDS?raw=true")),
+  readRDS(url("https://github.com/taraskaduk/uber-movement/blob/master/output/kyiv_speeds_delay_2_1.RDS?raw=true")),
+  readRDS(url("https://github.com/taraskaduk/uber-movement/blob/master/output/kyiv_speeds_delay_2_2.RDS?raw=true")),
+  readRDS(url("https://github.com/taraskaduk/uber-movement/blob/master/output/kyiv_speeds_delay_3_1.RDS?raw=true")),
+  readRDS(url("https://github.com/taraskaduk/uber-movement/blob/master/output/kyiv_speeds_delay_3_2.RDS?raw=true"))
+)
+mean_speed <- mean(speeds_delay$speed_kph_mean)
+covid <- as.Date("2020-03-12")
+
+speeds_delay_typical <- speeds_delay %>% 
+  filter(date(timestamp) >= date("2020-01-12") & 
+           date(timestamp) < date("2020-03-12")) 
+  
+
+```
+
+
+
+### Data Transformation
+To get the final metric of traffic delay (expressed as a %), a series of data transformation steps was taken:
+
+- each segment's length was obtained from the geometry data;
+- given each segment's length and mean speed, average travel was obtained;
+- for every segment, using daytime weekend data^[Nighttime data was avoided due to an increased probability of excessive speeding, which would skew the data. Instead, weekend daytime speeds were analyzed to establish the benchmark], maximum speed was obtained for every Saturday and Sunday, and the mean of these maximum weekend daytime speeds was established as segment's benchmark speed.
+- with maximum speeds available, "best time" was calculated for every observation, and the difference between actual travel time and "best time" constituted a time delay. 
+- in every subsequent grouping and aggregation, delays and "best" times would be summed up, and diving total delay time by total "best time" produced the final metric.
+
+
+```{r boundaries}
+center <- c(long = 30.5224974,
+            lat = 50.4508911)
+  
+dist <- c(12500, 7500)
+
+
+circle1 <- tibble(lat = center["lat"], long = center["long"]) %>% 
+  st_as_sf(coords = c("long", "lat"),crs = 4326) %>%  
+  st_transform(3857) %>% 
+  st_buffer(dist = dist[1]) %>% 
+  st_transform(4326)
+
+circle2 <- tibble(lat = center["lat"], long = center["long"]) %>% 
+  st_as_sf(coords = c("long", "lat"),crs = 4326) %>%  
+  st_transform(3857) %>% 
+  st_buffer(dist = dist[2]) %>% 
+  st_transform(4326)
+```
+
+### Code 
+Due to a large size of data necessary to work on this project, the analysis has been broken down into several parts:
+
+- The geospatial data about Kyiv city is pulled from OSM using osmdata package [@osmdata]. The code and the output are stored in [taraskaduk/kyiv_osm repo on GitHub](https://github.com/taraskaduk/kyiv_osm)
+- The raw data from Uber Movement was transformed and both the code and the output are stored in [taraskaduk/uber-movement repo on GitHUb](https://github.com/taraskaduk/uber-movement)
+- The final aggregations and visualizations are saved in the RMarkdown document that generates this web page. It should be located within the [taraskaduk/taraskaduk-distill](https://github.com/taraskaduk/taraskaduk-distill) repository responsible for publishing the entire site
+
+## Results
+
+### Typical traffic patters
+
+From the most recent available data set from January 1, 2020 to March 31, 2020, 2 months between January 12 and March 12 can be used to display the recent typical traffic: January 1-14 are considered holidays and March 12 through the end of the data set were the dates under COVID-19 quarantine.
+
+The typical traffic in Kyiv has all expected attributes of any large city: increased congestion during week days, especially during rush hours.
+
+```{r wday-delay, include=TRUE, layout="l-body-outset", fig.asp=1/2}
+speeds_wday <- speeds_delay_typical %>% 
+  mutate(date = date(timestamp),
+         wday = wday(date, label = TRUE, abbr=FALSE),
+         hour = hour(timestamp)) %>% 
+  group_by(wday, hour) %>% 
+  summarise(distance = sum(length),
+            time = sum(time),
+            best_time = sum(best_time),
+            delay = sum(delay)) %>% 
+  ungroup() %>% 
+  mutate(delay_pct = delay / best_time)
+
+ggplot(speeds_wday, aes(x=hour, y=delay_pct, col = "")) + 
+  geom_smooth(se=FALSE, span = 0.2) +
+  facet_wrap(~wday, nrow=1)+
+  scale_x_continuous(breaks=c(8,18),
+                     labels = c("8:00", "18:00"))+
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1),
+        breaks = c(0,0.25,0.5,0.75,1))+
+  theme(legend.position = "none",
+        axis.text.x = element_text(size = 6))+
+  scale_color_tk()+
+  labs(title = toupper("Typical Kyiv city traffic delays"),
+       subtitle = "By day of the week and hour of the day",
+       caption = caption)
+```
+
+Spatially, a typical weekday traffic flow can be visualized in the following manner:
+
+```{r hourly, include=FALSE}
+# Hourly by street --------------------------------------------------------
+
+speeds_bystreet_byhour <- speeds_delay_typical %>% 
+  filter(wday(timestamp) != 1 &
+         wday(timestamp) != 7) %>% 
+  mutate(hour = hour(timestamp)) %>% 
+  group_by(index, hour) %>% 
+  summarise(distance = sum(length),
+            time = sum(time),
+            best_time = sum(best_time),
+            delay = sum(delay),
+            speed_mean = mean(speed_kph_mean)) %>% 
+  ungroup() %>% 
+  mutate(speed = distance / time,
+         delay_pct = delay / best_time)
+
+speeds_check <- speeds_bystreet_byhour %>% 
+  group_by(index) %>% 
+  tally() %>% 
+  ungroup() %>% 
+  filter(n>=6) %>% 
+  select(-n) %>% 
+  merge(tibble(hour = c(0:23)), all=TRUE)
+
+speeds_expanded <- speeds_check %>%  
+  left_join(speeds_bystreet_byhour, by=c("index", "hour")) %>% 
+  replace_na(list(delay_pct = 0))
+
+speeds_expanded_geo <- speeds_expanded %>% 
+  inner_join(streets, by = "index") %>% 
+  st_as_sf()
+```
+
+
+```{r animation, eval=FALSE, include=FALSE}
+# Daily animation ---------------------------------------------------------
+
+hours <- c(0:23)
+boundaries <- list(circle2 = circle2, circle1=circle1, full=boundary)
+options <- c("circle2", "circle1", "full")
+
+gif_plot <- function(df, name){
+  
+  if (name == "boundary"){
+    plot_streets <- allstreets %>% 
+      filter(size>0.2)
+    plot_water <- water
+    plot_speeds <- speeds_expanded_geo
+    } else {
+    plot_streets <- allstreets %>% 
+      filter(size>0.2) %>% 
+      st_intersection(df)
+    plot_water <- water %>%
+      st_intersection(df)
+    plot_speeds <- speeds_expanded_geo %>% 
+      st_intersection(df)
+  }
+  
+  png_files <- NULL
+  for (h in hours){
+    plot_speeds_h <- plot_speeds %>% 
+      filter(hour == h)
+    ggplot()+
+      geom_sf(data = df, 
+              fill="#253441")+
+      geom_sf(data = plot_water,
+              fill = "#3C5368",
+              # size = .8,
+              lwd = 0) +
+      geom_sf(data= plot_streets,
+              col="#3B5268", 
+              size=0.1) +
+      geom_sf(data= plot_speeds_h, 
+              aes(geometry = geometry,
+                  col=delay_pct), 
+              size=0.4) +
+      scale_colour_viridis_c(
+        labels = scales::percent_format(accuracy = 1),
+        breaks = c(0.25,0.5,1,2.5),
+        #trans = "sqrt",
+        na.value = "grey50",
+        guide = "coloursteps",
+        option = "magma",
+        limits = c(0, 2.5), 
+        oob = scales::squish,
+        direction = -1) +
+      labs(title = toupper(paste0("Kyiv city traffic delay, ", str_pad(h,2,"left",0),":00")),
+           caption = caption,
+           color = "Traffic Delay, %") +
+      theme(legend.text = element_text(size = 6),
+            axis.line = element_blank(),
+            axis.text = element_blank(),
+            panel.grid.major = element_blank())
+    
+    frame <- paste0("temp/",name,"-", str_pad(h,2,"left",0),".png")
+    ggsave(frame)
+    png_files <- c(png_files, frame)
+  }
+    gif_file <- gifski(png_files, gif_file=paste0("temp/",name,".gif"), width=2100, height=2100)
+    unlink(png_files)
+}
+# $ gifski --quality 100 --width 2595 --fps 2 -o full.gif full*.png
+
+gif_plot(df=circle2,name="circle2")
+gif_plot(df=circle1,name="circle1")
+gif_plot(df=boundary,name="boundary")
+```
+
+```{r street-gifs, include=TRUE, layout="l-body-outset"}
+knitr::include_graphics("temp/boundary.gif")
+knitr::include_graphics("temp/circle1.gif")
+knitr::include_graphics("temp/circle2.gif")
+```
+
+
+The most problematic segments during rush hour can be visualized as follows:
+
+```{r rush-hour}
+rush_hour <- speeds_expanded_geo %>% 
+  #filter(delay_pct > 2) %>% 
+  filter(hour %in% c(8,18))
+
+rush_hour$label <- factor(rush_hour$hour, levels = rush_hour$hour, labels = paste0(rush_hour$hour, ":00"))
+
+p_rush <- ggplot()+
+  geom_sf(data=boundary, fill="#34495B")+
+  geom_sf(data = water,
+          fill = "#435D75",
+          # size = .8,
+          lwd = 0) +
+  geom_sf(data= allstreets %>% filter(size>0.2),
+          col="#435D75", size = 0.1) + 
+  geom_sf(data=rush_hour,
+          aes(geometry = geometry,
+              col=delay_pct), 
+          size=0.2) +
+  scale_colour_viridis_c(
+    labels = scales::percent_format(accuracy = 1),
+    breaks = c(0.25,0.5,1,2.5),
+    #trans = "sqrt",
+    na.value = "grey50",
+    guide = "coloursteps",
+    option = "magma",
+    limits = c(0, 2.5), 
+    oob = scales::squish,
+    direction = -1) +
+
+  labs(title = toupper(paste0("Kyiv city rush hour traffic delay")),
+       caption = caption,
+       color = "Traffic Delay, %") +
+  facet_wrap(~label) +
+  theme(legend.text = element_text(size = 6),
+        axis.line = element_blank(),
+        axis.text = element_blank(),
+        panel.grid.major = element_blank())
+ggsave("temp/rushhour.png", p_rush, width = 9, height = 7, units= "in", dpi = 150)
+
+```
+```{r rush-hour-png, include=TRUE, layout="l-body-outset"}
+knitr::include_graphics("temp/rushhour.png")
+```
+The pattern here is clear: the heaviest morning traffic at 8:00 is experienced at bridges and main highways moving people from the edges of the city into CBD, while the heaviest evening traffic at 18:00 is concentrated in the city center's, with a literal gridlock of cars trying to get out.
+
+
+Aggregating the data from small segments to full streets, we can identify the streets that are backed up the most overall, at the 8:00 peak and at the 18:00 peak.
+
+```{r roads}
+streets_nogeo <- streets %>% 
+  mutate(osm_id = as.character(osm_way_id)) %>% 
+  select(index, osm_id)
+st_geometry(streets_nogeo) <- NULL
+
+allstreets_nogeo <- allstreets %>% 
+  select(osm_id, name = name.en, name_ukr=name, highway_group)
+st_geometry(allstreets_nogeo) <- NULL
+
+speeds_byroad <- speeds_delay_typical %>% 
+  left_join(streets_nogeo, 
+            by = "index") %>% 
+  left_join(allstreets_nogeo,
+            by = "osm_id") %>% 
+  filter(!is.na(name)) %>% 
+  group_by(name, highway_group) %>% 
+  summarise(distance = sum(length),
+            time = sum(time),
+            best_time = sum(best_time),
+            delay = sum(delay),
+            speed_mean = mean(speed_kph_mean)) %>% 
+  ungroup() %>% 
+  filter(distance>250) %>% 
+  mutate(speed = distance / time,
+         delay_pct = delay / best_time)
+
+top_roads <- speeds_byroad %>% 
+  arrange(desc(delay_pct)) %>% 
+  rename(Street=highway_group)
+```
+```{r top25, include=TRUE, fig.asp=1/1}
+ggplot(top_roads %>% head(25), aes(x=reorder(name, delay_pct), y=delay_pct, fill=delay_pct))+
+  geom_col()+
+  coord_flip()+
+  theme(panel.grid.major.y = element_blank())+
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
+  scale_fill_viridis_c(
+      labels = scales::percent_format(accuracy = 1),
+      breaks = c(0.25,0.5,1,2.5),
+      #trans = "sqrt",
+      na.value = "grey50",
+      guide = "coloursteps",
+      option = "magma",
+      limits = c(0, 2.5), 
+      oob = scales::squish,
+      direction = -1) +
+  theme(legend.position = "none") +
+  labs(title = toupper(paste0("Kyiv streets with worst daily delays")),
+       caption = caption) 
+```
+```{r rush-hour-roads}
+speeds_byroad_rushhour <- speeds_delay_typical %>% 
+  filter(hour %in% c(8,18)) %>% 
+  left_join(streets_nogeo, 
+            by = "index") %>% 
+  left_join(allstreets_nogeo,
+            by = "osm_id") %>% 
+  filter(!is.na(name)) %>% 
+  group_by(name, highway_group, hour) %>% 
+  summarise(distance = sum(length),
+            time = sum(time),
+            best_time = sum(best_time),
+            delay = sum(delay),
+            speed_mean = mean(speed_kph_mean)) %>% 
+  ungroup() %>% 
+  filter(distance>250) %>% 
+  mutate(speed = distance / time,
+         delay_pct = delay / best_time)
+
+top_roads_rushhour <- speeds_byroad_rushhour %>% 
+  arrange(desc(delay_pct)) %>% 
+  rename(Street=highway_group)
+```
+
+```{r top-25-rushhour, include=TRUE, fig.asp=1/1}
+ggplot(top_roads_rushhour %>% 
+         filter(hour == 8) %>% 
+         head(25), aes(x=reorder(name, delay_pct), y=delay_pct, fill=delay_pct))+
+  geom_col()+
+  coord_flip()+
+  theme(panel.grid.major.y = element_blank())+
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
+  scale_fill_viridis_c(
+    labels = scales::percent_format(accuracy = 1),
+    breaks = c(0.25,0.5,1,2.5),
+    #trans = "sqrt",
+    na.value = "grey50",
+    guide = "coloursteps",
+    option = "magma",
+    limits = c(0, 2.5), 
+    oob = scales::squish,
+    direction = -1) +
+  theme(legend.position = "none") +
+  labs(title = toupper(paste0("Kyiv streets with worst 8:00 delays")),
+       caption = caption)
+  
+
+ggplot(top_roads_rushhour %>% 
+         filter(hour == 18) %>% 
+         head(25), aes(x=reorder(name, delay_pct), y=delay_pct, fill=delay_pct))+
+  geom_col()+
+  coord_flip()+
+  theme(panel.grid.major.y = element_blank())+
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
+    scale_fill_viridis_c(
+    labels = scales::percent_format(accuracy = 1),
+    breaks = c(0.25,0.5,1,2.5),
+    #trans = "sqrt",
+    na.value = "grey50",
+    guide = "coloursteps",
+    option = "magma",
+    limits = c(0, 2.5), 
+    oob = scales::squish,
+    direction = -1) +
+  theme(legend.position = "none")+
+  labs(title = toupper(paste0("Kyiv streets with worst 18:00 delays")),
+       caption = caption)
+```
+
+```{r roads-byhour}
+speeds_byroadbyhour <- speeds_delay_typical %>% 
+  left_join(streets_nogeo, 
+            by = "index") %>% 
+  left_join(allstreets_nogeo,
+            by = "osm_id") %>% 
+  filter(!is.na(name)) %>% 
+  group_by(name, highway_group, hour) %>% 
+  summarise(distance = sum(length),
+            time = sum(time),
+            best_time = sum(best_time),
+            delay = sum(delay),
+            speed_mean = mean(speed_kph_mean)) %>% 
+  ungroup() %>% 
+  filter(distance>250) %>% 
+  mutate(speed = distance / time,
+         delay_pct = delay / best_time) %>% 
+  group_by(hour) %>% 
+  mutate(rank = row_number(desc(delay_pct))) %>% 
+  ungroup()
+
+top_roads_byhour <- speeds_byroadbyhour %>% 
+  filter(rank <=25) %>% 
+  arrange(desc(delay_pct)) %>% 
+  rename(Street=highway_group)
+```
+
+```{r top25-anim, eval=FALSE}
+anim <- ggplot(top_roads_byhour,
+               aes(x=-rank, y=delay_pct, group=name))+
+  geom_tile(aes(y = delay_pct / 2, height = delay_pct, fill=delay_pct), width = 0.9) +
+  geom_text(aes(label = name, y=-0.1), 
+            hjust = "right", 
+            colour = "black", 
+            family="Roboto Mono") +
+  geom_text(aes(label = scales::percent(delay_pct, accuracy = 1)), 
+            hjust = "left", 
+            nudge_y = 0.5, 
+            family="Roboto Mono",
+            colour = "grey30") +
+  theme(panel.grid.major.y = element_blank())+
+  scale_x_discrete("") +
+  #scale_y_continuous(scales::percent_format(accuracy = 1))+
+  scale_y_continuous("") +
+  scale_fill_viridis_c(
+    labels = scales::percent_format(accuracy = 1),
+    breaks = c(0.25,0.5,1,2.5),
+    #trans = "sqrt",
+    na.value = "grey50",
+    guide = "coloursteps",
+    option = "magma",
+    limits = c(0, 2.5), 
+    oob = scales::squish,
+    direction = -1) +
+  theme(axis.text = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none")+
+  #xlim(-25,-1)+
+  expand_limits(y=-5)+
+  coord_flip() +
+  labs(title = "TOP KYIV STREET DELAYS AT {closest_state}:00",
+       caption = caption) +
+  transition_states(hour, transition_length = 2, state_length = 1) +
+  ease_aes('cubic-in-out')
+
+animate(anim, 
+        duration = 48,
+        fps = 25,
+        height = 8.5, width = 8.5, units = "in", res = 150)
+
+anim_save("temp/streets.gif")
+```
+
+```{r top25-anim-gif, include=TRUE, layout="l-body-outset"}
+knitr::include_graphics("temp/streets.gif")
+```
+
+### COVID-19 Quarantine Impact
+
+What we can also imply from these Uber Movement data sets is how the traffic was affected following the initial lockdown measures put in place to prevent the spread of COVID-19, with most countries reacting around February-March 2020.
+
+The initial lockdown in Kyiv was initiated on March 12, 2020, which is very clear from the average delays on the roads of the city.
+
+Daily traffic delays decreased immediately after the imposed lockdown:
+
+```{r daily-covid, include=TRUE, layout="l-body-outset", fig.asp=1/2}
+speeds_daily <- speeds_delay %>% 
+  mutate(date = date(timestamp)) %>% 
+  group_by(date) %>% 
+  summarise(distance = sum(length),
+            time = sum(time),
+            best_time = sum(best_time),
+            delay = sum(delay),
+            speed_mean = mean(speed_kph_mean)) %>% 
+  ungroup() %>% 
+  mutate(speed = distance / time,
+         delay_pct = delay / best_time)
+
+ggplot(speeds_daily, aes(x=date, y=delay_pct,col = ""))+
+  geom_vline(xintercept=covid,
+             linetype = 3) +
+  annotate("label", x = covid, y = 0, 
+           label = "COVID-19 quarantine",
+           label.size=NA,
+           fill="#F3F6F7") +
+  geom_vline(xintercept=ymd("20200114"),
+           linetype = 3) +
+  annotate("label", x = ymd("20200114"), y = 0, 
+         label = "Holidays end",
+         label.size=NA,
+         fill="#F3F6F7") +
+  geom_smooth(se=FALSE, span = 0.1) +
+  scale_color_tk()+
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
+  labs(title = toupper(paste0("Kyiv city daily average traffic delay")),
+       subtitle = "Before and immediately following COVID-19 lockdown",
+       caption = caption,
+       fill = "Traffic Delay, %")+
+  theme(legend.position = "none")
+
+```
+The effect is also visible on the hourly level, and for every day of the week, including weekends:
+```{r wday-covid}
+speeds_wday_covid <- speeds_delay %>% 
+  mutate(date = date(timestamp),
+         wday = wday(date, label = TRUE, abbr=FALSE),
+         hour = hour(timestamp),
+         split = if_else(date<=ymd("20200114"), "Winter Holidays", 
+                         if_else(date<covid, "Regular Traffic", "Traffic in Lockdown"))) %>% 
+  filter(split != "Winter Holidays") %>% 
+  group_by(wday, hour, split) %>% 
+  summarise(distance = sum(length),
+            time = sum(time),
+            best_time = sum(best_time),
+            delay = sum(delay)) %>% 
+  ungroup() %>% 
+  mutate(delay_pct = delay / best_time)
+```
+
+```{r wday-delay-covid, include=TRUE, layout="l-body-outset", fig.asp=3/5}
+ggplot(speeds_wday_covid, aes(x=hour, 
+                              y=delay_pct, 
+                              col = split, 
+                              group = split)) + 
+  geom_smooth(se=FALSE, span = 0.2) +
+  facet_wrap(~wday,nrow =1)+
+  scale_x_continuous(breaks=c(8,18),
+                     labels = c("8:00", "18:00"))+
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1),
+        breaks = c(0,0.25,0.5,0.75,1))+
+  scale_color_manual(values = c(colors[colors$name=="Blue",]$value,
+                                colors[colors$name=="Red",]$value))+
+  theme(axis.text.x = element_text(size = 6))+
+  labs(title = toupper("Kyiv city traffic delays"),
+       subtitle = "Typical traffic VS COVID-19 lockdown",
+       caption = caption)
+```
+```{r dayhour-covid, layout="l-body-outset", fig.width=8, include=TRUE}
+speeds_bydayhour <- speeds_delay %>% 
+  mutate(hour = hour(timestamp),
+         date = date(timestamp)) %>% 
+  group_by(date, hour) %>% 
+  summarise(distance = sum(length),
+            time = sum(time),
+            best_time = sum(best_time),
+            delay = sum(delay),
+            speed_mean = mean(speed_kph_mean)) %>% 
+  ungroup() %>% 
+  mutate(speed = distance / time,
+         delay_pct = delay / best_time)
+
+ggplot(speeds_bydayhour, aes(x=date, y=hour, fill=delay_pct)) +
+  geom_tile() +
+  geom_vline(xintercept=covid,
+             linetype = 3) +
+  annotate("label", x = covid, y = 0, 
+           label = "COVID-19 quarantine",
+           label.size=NA,
+           fill="#F3F6F7") +
+  geom_vline(xintercept=ymd("20200114"),
+         linetype = 3) +
+  annotate("label", x = ymd("20200114"), y = 0, 
+         label = "Holidays end",
+         label.size=NA,
+         fill="#F3F6F7") +
+  scale_fill_viridis_c(
+        labels = scales::percent_format(accuracy = 1),
+        breaks = c(0.25,0.5,1,2.5),
+        na.value = "grey50",
+        guide = "coloursteps",
+        option = "magma",
+        direction = -1) +
+  scale_y_continuous(breaks = c(0,8,18,23), 
+                     labels = c("00:00", "8:00", "18:00", "23:00")) +
+  scale_x_date(date_labels = "%b %d",
+               date_breaks = "1 month"
+               ) +
+  theme(axis.title = element_blank(),
+        # legend.position="right",
+        # legend.text = element_text(size = 10),
+        panel.grid.minor = element_blank()) +
+  coord_equal() +
+  labs(title = toupper(paste0("Kyiv city traffic delay by hour of the day")),
+           caption = caption,
+           fill = "Traffic Delay, %")
+```
+
+## Discussion
+
+Unfortunately, the data provided by Uber Movement only goes up to March 31, 2020. Therefore, at this moment in time, it becomes impossible to evaluate the long-term effect of the lockdown, the easing of the restrictions, or the public fatigue on the traffic delays. 
+
+Nevertheless, this analysis provides a basis for such future examination, whenever more recent data becomes available. The analysis also allows to perform a similar analysis for any of the 60 cities for which the data is available. The R code used to create this analysis can be repurposed for other cities with minimal changes (see "Code" section for links to the R code behind this analysis).

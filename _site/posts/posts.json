@@ -1,5 +1,23 @@
 [
   {
+    "path": "posts/2020-12-06-uber-movement-kyiv/",
+    "title": "Analysis of Kyiv Road Traffic Using Uber Movement Data",
+    "description": "This analysis uses Uber Movement speed data to analyze traffic of Kyiv, Ukraine. By looking at the speed data, we are able to find traffic flow's bottlenecks, as well as see the impact of COVID-19-related measures on the city traffic",
+    "author": [
+      {
+        "name": "Taras Kaduk",
+        "url": "https://taraskaduk.com"
+      }
+    ],
+    "date": "2020-12-06",
+    "categories": [],
+    "preview": "posts/2020-12-06-uber-movement-kyiv/uber-movement-kyiv_files/figure-html5/wday-delay-1.png",
+    "last_modified": "2020-12-06T18:13:41-05:00",
+    "input_file": "uber-movement-kyiv.utf8.md",
+    "preview_width": 1248,
+    "preview_height": 624
+  },
+  {
     "path": "posts/2019-11-11-excess-degree-days/",
     "title": "Measuring Excess Degree-Days in the Context of Location Comfort and Liveability",
     "description": "Calcualting deviations (excess heat and  excess cold) from an established temperature baseline as area under the temperature curve via integral calculus and expressing such measure as Excess Degree-Days, or EDD.",
