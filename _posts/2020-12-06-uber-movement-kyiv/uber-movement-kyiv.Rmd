@@ -12,6 +12,7 @@ output:
     toc: true
     toc_depth: 2
 bibliography: bibliography.bib
+draft: true
 ---
 
 ```{r setup, include=FALSE}
@@ -19,8 +20,8 @@ knitr::opts_chunk$set(
 	echo = FALSE,
 	message = FALSE,
 	warning = FALSE,
-	include=FALSE,
-	layout="l-body-outset"
+	include = FALSE,
+	layout = "l-body-outset"
 )
 ```
 
@@ -133,7 +134,7 @@ From the most recent available data set from January 1, 2020 to March 31, 2020, 
 
 The typical traffic in Kyiv has all expected attributes of any large city: increased congestion during week days, especially during rush hours.
 
-```{r wday-delay, include=TRUE, layout="l-body-outset", fig.asp=1/2}
+```{r wday-delay, include=TRUE, fig.asp=1/2}
 speeds_wday <- speeds_delay_typical %>% 
   mutate(date = date(timestamp),
          wday = wday(date, label = TRUE, abbr=FALSE),
@@ -281,47 +282,14 @@ knitr::include_graphics("temp/circle2.gif")
 
 The most problematic segments during rush hour can be visualized as follows:
 
-```{r rush-hour}
+```{r rush-hour, preview=TRUE}
 rush_hour <- speeds_expanded_geo %>% 
   #filter(delay_pct > 2) %>% 
   filter(hour %in% c(8,18))
 
 rush_hour$label <- factor(rush_hour$hour, levels = rush_hour$hour, labels = paste0(rush_hour$hour, ":00"))
 
-p_rush <- ggplot()+
-  geom_sf(data=boundary, fill="#34495B")+
-  geom_sf(data = water,
-          fill = "#435D75",
-          # size = .8,
-          lwd = 0) +
-  geom_sf(data= allstreets %>% filter(size>0.2),
-          col="#435D75", size = 0.1) + 
-  geom_sf(data=rush_hour,
-          aes(geometry = geometry,
-              col=delay_pct), 
-          size=0.2) +
-  scale_colour_viridis_c(
-    labels = scales::percent_format(accuracy = 1),
-    breaks = c(0.25,0.5,1,2.5),
-    #trans = "sqrt",
-    na.value = "grey50",
-    guide = "coloursteps",
-    option = "magma",
-    limits = c(0, 2.5), 
-    oob = scales::squish,
-    direction = -1) +
-
-  labs(title = toupper(paste0("Kyiv city rush hour traffic delay")),
-       caption = caption,
-       color = "Traffic Delay, %") +
-  facet_wrap(~label) +
-  theme(legend.text = element_text(size = 6),
-        axis.line = element_blank(),
-        axis.text = element_blank(),
-        panel.grid.major = element_blank())
-ggsave("temp/rushhour.png", p_rush, width = 9, height = 7, units= "in", dpi = 150)
-
-p_preview <- ggplot()+
+ggplot()+
   geom_sf(data=boundary, fill="#34495B")+
   geom_sf(data = water,
           fill = "#435D75",
@@ -343,23 +311,46 @@ p_preview <- ggplot()+
     limits = c(0, 2.5), 
     oob = scales::squish,
     direction = -1) +
-
   labs(title = toupper(paste0("Kyiv city 8:00 traffic delay")),
        caption = caption,
        color = "Traffic Delay, %") +
-  facet_wrap(~label) +
   theme(legend.text = element_text(size = 6),
         axis.line = element_blank(),
         axis.text = element_blank(),
         panel.grid.major = element_blank())
-ggsave("temp/preview.png", p_rush)
-```
-```{r rush-hour-png, include=TRUE}
-knitr::include_graphics("temp/rushhour.png")
-```
 
-```{r preview, preview=TRUE}
-knitr::include_graphics("temp/preview.png")
+ggplot()+
+  geom_sf(data=boundary, fill="#34495B")+
+  geom_sf(data = water,
+          fill = "#435D75",
+          # size = .8,
+          lwd = 0) +
+  geom_sf(data= allstreets %>% filter(size>0.2),
+          col="#435D75", size = 0.1) + 
+  geom_sf(data=rush_hour %>% filter(hour==18),
+          aes(geometry = geometry,
+              col=delay_pct), 
+          size=0.2) +
+  scale_colour_viridis_c(
+    labels = scales::percent_format(accuracy = 1),
+    breaks = c(0.25,0.5,1,2.5),
+    #trans = "sqrt",
+    na.value = "grey50",
+    guide = "coloursteps",
+    option = "magma",
+    limits = c(0, 2.5), 
+    oob = scales::squish,
+    direction = -1) +
+  labs(title = toupper(paste0("Kyiv city 18:00 traffic delay")),
+       caption = caption,
+       color = "Traffic Delay, %") +
+  theme(legend.text = element_text(size = 6),
+        axis.line = element_blank(),
+        axis.text = element_blank(),
+        panel.grid.major = element_blank())
+```
+```{r rush-hour-png, eval=FALSE}
+knitr::include_graphics("temp/rushhour.png")
 ```
 
 The pattern here is clear: the heaviest morning traffic at 8:00 is experienced at bridges and main highways moving people from the edges of the city into CBD, while the heaviest evening traffic at 18:00 is concentrated in the city center's, with a literal gridlock of cars trying to get out.
