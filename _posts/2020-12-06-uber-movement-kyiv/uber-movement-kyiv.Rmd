@@ -352,7 +352,7 @@ rush18 <- ggplot()+
 ggsave("temp/rush18.png", rush18, height = 8, width = 13)
 ```
 
-```{r rush-hour-png, include=TRUE, preview=TRUE}
+```{r rush-hour-png, include=TRUE}
 knitr::include_graphics("temp/rush8.png")
 knitr::include_graphics("temp/rush18.png")
 ```
