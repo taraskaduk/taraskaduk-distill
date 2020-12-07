@@ -12,7 +12,6 @@ output:
     toc: true
     toc_depth: 2
 bibliography: bibliography.bib
-draft: true
 ---
 
 ```{r setup, include=FALSE}
@@ -282,14 +281,14 @@ knitr::include_graphics("temp/circle2.gif")
 
 The most problematic segments during rush hour can be visualized as follows:
 
-```{r rush-hour, preview=TRUE}
+```{r rush-hour, include=TRUE}
 rush_hour <- speeds_expanded_geo %>% 
   #filter(delay_pct > 2) %>% 
   filter(hour %in% c(8,18))
 
 rush_hour$label <- factor(rush_hour$hour, levels = rush_hour$hour, labels = paste0(rush_hour$hour, ":00"))
 
-ggplot()+
+rush8 <- ggplot()+
   geom_sf(data=boundary, fill="#34495B")+
   geom_sf(data = water,
           fill = "#435D75",
@@ -318,8 +317,9 @@ ggplot()+
         axis.line = element_blank(),
         axis.text = element_blank(),
         panel.grid.major = element_blank())
+ggsave("temp/rush8.png", rush8, width = 8, height = 6, dpi=150)
 
-ggplot()+
+rush18 <- ggplot()+
   geom_sf(data=boundary, fill="#34495B")+
   geom_sf(data = water,
           fill = "#435D75",
@@ -348,9 +348,12 @@ ggplot()+
         axis.line = element_blank(),
         axis.text = element_blank(),
         panel.grid.major = element_blank())
+ggsave("temp/rush18.png", rush18, width = 8, height = 6, dpi=150)
 ```
-```{r rush-hour-png, eval=FALSE}
-knitr::include_graphics("temp/rushhour.png")
+
+```{r rush-hour-png, include=TRUE, preview=TRUE}
+knitr::include_graphics("temp/rush8.png")
+knitr::include_graphics("temp/rush18.png")
 ```
 
 The pattern here is clear: the heaviest morning traffic at 8:00 is experienced at bridges and main highways moving people from the edges of the city into CBD, while the heaviest evening traffic at 18:00 is concentrated in the city center's, with a literal gridlock of cars trying to get out.

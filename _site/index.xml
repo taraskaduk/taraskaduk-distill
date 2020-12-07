@@ -20,7 +20,7 @@
       <description>This analysis uses Uber Movement speed data to analyze traffic of Kyiv, Ukraine. By looking at the speed data, we are able to find traffic flow's bottlenecks, as well as see the impact of COVID-19-related measures on the city traffic</description>
       <guid>https://taraskaduk.com/posts/2020-12-06-uber-movement-kyiv</guid>
       <pubDate>Sun, 06 Dec 2020 00:00:00 +0000</pubDate>
-      <media:content url="https://taraskaduk.com/posts/2020-12-06-uber-movement-kyiv/uber-movement-kyiv_files/figure-html5/wday-delay-1.png" medium="image" type="image/png" width="1248" height="624"/>
+      <media:content url="https://taraskaduk.com/posts/2020-12-06-uber-movement-kyiv/temp/rush8.png" medium="image" type="image/png" width="1200" height="900"/>
     </item>
     <item>
       <title>Measuring Excess Degree-Days in the Context of Location Comfort and Liveability</title>
