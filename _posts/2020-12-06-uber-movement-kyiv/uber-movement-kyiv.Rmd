@@ -13,7 +13,6 @@ output:
     toc_depth: 2
 bibliography: bibliography.bib
 preview:  temp/preview.jpg
-draft: true
 ---
 
 ```{r setup, include=FALSE}
@@ -319,7 +318,7 @@ rush8 <- ggplot()+
         axis.line = element_blank(),
         axis.text = element_blank(),
         panel.grid.major = element_blank())
-ggsave("temp/rush8.png", rush8, width=2100, height=2100)
+ggsave("temp/rush8.png", rush8, height = 8, width = 13)
 
 rush18 <- ggplot()+
   geom_sf(data=boundary, fill="#34495B")+
@@ -350,7 +349,7 @@ rush18 <- ggplot()+
         axis.line = element_blank(),
         axis.text = element_blank(),
         panel.grid.major = element_blank())
-ggsave("temp/rush18.png", rush18, width=2100, height=2100)
+ggsave("temp/rush18.png", rush18, height = 8, width = 13)
 ```
 
 ```{r rush-hour-png, include=TRUE, preview=TRUE}
