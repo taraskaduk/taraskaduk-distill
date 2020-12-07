@@ -3,7 +3,7 @@ title: "Geospatial posts and projects"
 site: distill::distill_website
 listing: 
   posts:
-    - 2020-10-12-uber-movement-kyiv
+    - 2020-12-06-uber-movement-kyiv
     - 2019-11-11-excess-degree-days 
     - 2019-02-18-weather
     - 2017-11-26-pixel-maps
