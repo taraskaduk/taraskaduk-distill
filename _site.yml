@@ -3,6 +3,7 @@ title: "Taras Kaduk"
 description: |
   Taras Kaduk
 output_dir: "_site"
+theme: theme.css
 base_url: https://taraskaduk.com
 favicon: static/logo.png
 twitter:
@@ -29,7 +30,6 @@ navbar:
 include: ["_redirects"]
 output:
   distill::distill_article:
-    css: style.css
     includes:
       in_header: utterances.html
     

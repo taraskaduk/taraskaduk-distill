@@ -18,6 +18,73 @@
  <!--radix_placeholder_import_source-->
  <!--/radix_placeholder_import_source-->
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ad0000; } /* Alert */
+code span.an { color: #5e5e5e; } /* Annotation */
+code span.at { color: #20794d; } /* Attribute */
+code span.bn { color: #ad0000; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007ba5; } /* ControlFlow */
+code span.ch { color: #20794d; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #5e5e5e; } /* Comment */
+code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+code span.dt { color: #ad0000; } /* DataType */
+code span.dv { color: #ad0000; } /* DecVal */
+code span.er { color: #ad0000; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #ad0000; } /* Float */
+code span.fu { color: #4758ab; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #5e5e5e; } /* Information */
+code span.kw { color: #007ba5; } /* Keyword */
+code span.op { color: #5e5e5e; } /* Operator */
+code span.ot { color: #007ba5; } /* Other */
+code span.pp { color: #ad0000; } /* Preprocessor */
+code span.sc { color: #20794d; } /* SpecialChar */
+code span.ss { color: #20794d; } /* SpecialString */
+code span.st { color: #20794d; } /* String */
+code span.va { color: #111111; } /* Variable */
+code span.vs { color: #20794d; } /* VerbatimString */
+code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+</style>
+
   <!--radix_placeholder_meta_tags-->
 <title>Taras Kaduk: Create World Pixel Maps in R</title>
 
@@ -1946,10 +2013,324 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 
+<style type="text/css">
+/* base variables */
+
+/* Edit the CSS properties in this file to create a custom
+   Distill theme. Only edit values in the right column
+   for each row; values shown are the CSS defaults.
+   To return any property to the default,
+   you may set its value to: unset
+   All rows must end with a semi-colon.                      */
+
+/* Optional: embed custom fonts here with `@import`          */
+/* This must remain at the top of this file.                 */
+
+
+
+html {
+  /*-- Main font sizes --*/
+  --title-size:      50px;
+  --body-size:       1.06rem;
+  --code-size:       14px;
+  --aside-size:      12px;
+  --fig-cap-size:    13px;
+  /*-- Main font colors --*/
+  --title-color:     #000000;
+  --header-color:    rgba(0, 0, 0, 0.8);
+  --body-color:      rgba(0, 0, 0, 0.8);
+  --aside-color:     rgba(0, 0, 0, 0.6);
+  --fig-cap-color:   rgba(0, 0, 0, 0.6);
+  /*-- Specify custom fonts ~~~ must be imported above   --*/
+  --heading-font:    sans-serif;
+  --mono-font:       monospace;
+  --body-font:       sans-serif;
+  --navbar-font:     sans-serif;  /* websites + blogs only */
+}
+
+/*-- ARTICLE METADATA --*/
+d-byline {
+  --heading-size:    0.6rem;
+  --heading-color:   rgba(0, 0, 0, 0.5);
+  --body-size:       0.8rem;
+  --body-color:      rgba(0, 0, 0, 0.8);
+}
+
+/*-- ARTICLE TABLE OF CONTENTS --*/
+.d-contents {
+  --heading-size:    18px;
+  --contents-size:   13px;
+}
+
+/*-- ARTICLE APPENDIX --*/
+d-appendix {
+  --heading-size:    15px;
+  --heading-color:   rgba(0, 0, 0, 0.65);
+  --text-size:       0.8em;
+  --text-color:      rgba(0, 0, 0, 0.5);
+}
+
+/*-- WEBSITE HEADER + FOOTER --*/
+/* These properties only apply to Distill sites and blogs  */
+
+.distill-site-header {
+  --title-size:       18px;
+  --text-color:       rgba(255, 255, 255, 0.8);
+  --text-size:        15px;
+  --hover-color:      white;
+  --bkgd-color:       #0F2E3D;
+}
+
+.distill-site-footer {
+  --text-color:       rgba(255, 255, 255, 0.8);
+  --text-size:        15px;
+  --hover-color:      white;
+  --bkgd-color:       #0F2E3D;
+}
+
+/*-- Additional custom styles --*/
+/* Add any additional CSS rules below                      */
+</style>
+<style type="text/css">
+/* base variables */
+
+/* Edit the CSS properties in this file to create a custom
+   Distill theme. Only edit values in the right column
+   for each row; values shown are the CSS defaults.
+   To return any property to the default,
+   you may set its value to: unset
+   All rows must end with a semi-colon.                      */
+
+/* Optional: embed custom fonts here with `@import`          */
+/* This must remain at the top of this file.                 */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;400');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code');
+
+
+html {
+  /*-- Main font sizes --*/
+  --title-size:      50px;
+  --body-size:       1.06rem;
+  --code-size:       14px;
+  --aside-size:      12px;
+  --fig-cap-size:    13px;
+  /*-- Main font colors --*/
+  --title-color:     #000000;
+  --header-color:    rgba(0, 0, 0, 0.8);
+  --body-color:      rgba(0, 0, 0, 0.8);
+  --aside-color:     rgba(0, 0, 0, 0.6);
+  --fig-cap-color:   rgba(0, 0, 0, 0.6);
+  /*-- Specify custom fonts ~~~ must be imported above   --*/
+  --heading-font:    'Oswald', sans-serif;
+  --mono-font:       'Roboto Mono', monospace;
+  --body-font:       'Roboto Condensed', sans-serif;
+  --navbar-font:     'Oswald', sans-serif;
+  --code-font:       'Fira Code', monospace;
+}
+
+/*-- ARTICLE METADATA --*/
+d-byline {
+  --heading-size:    0.6rem;
+  --heading-color:   rgba(0, 0, 0, 0.5);
+  --body-size:       0.8rem;
+  --body-color:      rgba(0, 0, 0, 0.8);
+}
+
+/*-- ARTICLE TABLE OF CONTENTS --*/
+.d-contents {
+  --heading-size:    18px;
+  --contents-size:   13px;
+}
+
+/*-- ARTICLE APPENDIX --*/
+d-appendix {
+  --heading-size:    15px;
+  --heading-color:   rgba(0, 0, 0, 0.65);
+  --text-size:       0.8em;
+  --text-color:      rgba(0, 0, 0, 0.5);
+  --bkgd-color:      #f2f4f8;
+}
+
+/*-- WEBSITE HEADER + FOOTER --*/
+/* These properties only apply to Distill sites and blogs  */
+
+.distill-site-header {
+  --title-size:       18px;
+  --text-color:       rgba(255, 255, 255, 0.8);
+  --text-size:        18px;
+  --hover-color:      white;
+  --bkgd-color:       #394B6A;
+}
+
+.distill-site-footer {
+  --text-color:       rgba(255, 255, 255, 0.8);
+  --text-size:        12px;
+  --hover-color:      white;
+  --bkgd-color:       #394B6A;
+}
+
+/*-- Additional custom styles --*/
+/* Add any additional CSS rules below                      */
+
+/*-- Code --*/
+code, pre {
+    font-family: "Fira+Code", "Roboto Mono", "Source Code Pro", "Lucida Console",
+    Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+}</style>
+<style type="text/css">
+/* base style */
+
+/* FONT FAMILIES */
+
+:root {
+  --heading-default: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono-default: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  --body-default: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+}
+
+body,
+.posts-list .post-preview p,
+.posts-list .description p {
+  font-family: var(--body-font), var(--body-default);
+}
+
+h1, h2, h3, h4, h5, h6,
+.posts-list .post-preview h2,
+.posts-list .description h2 {
+  font-family: var(--heading-font), var(--heading-default);
+}
+
+d-article div.sourceCode code,
+d-article pre code {
+	font-family: var(--mono-font), var(--mono-default);
+}
+
+
+/*-- TITLE --*/
+d-title h1,
+.posts-list > h1 {
+  color: var(--title-color, black);
+}
+
+d-title h1 {
+  font-size: var(--title-size, 50px);
+}
+
+/*-- HEADERS --*/
+d-article h1,
+d-article h2,
+d-article h3,
+d-article h4,
+d-article h5,
+d-article h6 {
+  color: var(--header-color, rgba(0, 0, 0, 0.8));
+}
+
+/*-- BODY --*/
+/* only text inside of <p> tags */
+d-article > p {
+  color: var(--body-color, rgba(0, 0, 0, 0.8));
+  font-size: var(--body-size, 1.06rem);
+}
+
+/*-- CODE --*/
+d-article div.sourceCode code,
+d-article pre code {
+	font-size: var(--code-size, 14px);
+}
+
+/*-- ASIDE --*/
+d-article aside {
+	font-size: var(--aside-size, 12px);
+	color: var(--aside-color, rgba(0, 0, 0, 0.6));
+}
+
+/*-- FIGURE CAPTIONS --*/
+figure .caption,
+figure figcaption,
+.figure .caption {
+	font-size: var(--fig-cap-size, 13px);
+	color: var(--fig-cap-color, rgba(0, 0, 0, 0.6));
+}
+
+/*-- METADATA --*/
+d-byline h3 {
+	font-size: var(--heading-size, 0.6rem);
+	color: var(--heading-color, rgba(0, 0, 0, 0.5));
+}
+
+d-byline {
+	font-size: var(--body-size, 0.8rem);
+	color: var(--body-color, rgba(0, 0, 0, 0.8));
+}
+
+d-byline a,
+d-article d-byline a {
+	color: var(--body-color, rgba(0, 0, 0, 0.8));
+}
+
+/*-- TABLE OF CONTENTS --*/
+.d-contents nav h3 {
+	font-size: var(--heading-size, 18px);
+}
+
+.d-contents nav a {
+	font-size: var(--contents-size, 13px);
+}
+
+/*-- APPENDIX --*/
+d-appendix h3 {
+  font-size: var(--heading-size, 15px);
+	color: var(--heading-color, rgba(0, 0, 0, 0.65));
+}
+
+d-appendix {
+  font-size: var(--text-size, 0.8em);
+	color: var(--text-color, rgba(0, 0, 0, 0.5));
+}
+
+d-appendix d-footnote-list a.footnote-backlink {
+	color: var(--text-color, rgba(0, 0, 0, 0.5));
+}
+
+/*-- WEBSITE HEADER + FOOTER --*/
+.distill-site-header .title {
+	font-size: var(--title-size, 18px);
+	font-family: var(--navbar-font), var(--heading-default);
+}
+
+.distill-site-header a,
+.nav-dropdown .nav-dropbtn {
+  font-family: var(--navbar-font), var(--heading-default);
+}
+
+.distill-site-header a:hover {
+	color: var(--hover-color, white);
+}
+
+.distill-site-header {
+	font-size: var(--text-size, 15px);
+	color: var(--text-color, rgba(255, 255, 255, 0.8));
+	background-color: var(--bkgd-color, #0F2E3D);
+}
+
+.distill-site-footer {
+	font-size: var(--text-size, 15px);
+	color: var(--text-color, rgba(255, 255, 255, 0.8));
+	background-color: var(--bkgd-color, #0F2E3D);
+}
+
+.distill-site-footer a:hover {
+	color: var(--hover-color, white);
+}</style>
 <!--/radix_placeholder_distill-->
   <link href="../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
   <script src="../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
   <script src="../../site_libs/jquery-1.11.3/jquery.min.js"></script>
+  <script src="../../site_libs/anchor-4.2.2/anchor.min.js"></script>
   <script src="../../site_libs/bowser-1.9.3/bowser.min.js"></script>
   <script src="../../site_libs/webcomponents-2.0.0/webcomponents.js"></script>
   <script src="../../site_libs/distill-2.2.21/template.v2.js"></script>
@@ -1982,85 +2363,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 </script>
 
-<style type="text/css">
-/*https://github.com/MilesMcBain/milesmcbain.com/blob/master/mmstyle.css*/
-
-/* Import fonts from Google's API */
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
-
-
-.distill-site-nav {
-    font-family: 'Oswald', sans-serif !important;
-    background-color: #394B6A;
-    color: #fff;
-    font-size: 20px;
-    font-weight: 200;
-}
-
-.distill-site-header {
-    font-family: 'Oswald', sans-serif !important;
-    background-color: #394B6A;
-    color: #fff;
-    font-size: 20px;
-    font-weight: 200;
-}
-
-.distill-site-nav a:hover {
-    color: #C98686;
-}
-
-
-.distill-site-footer p {
-    font-family: 'Roboto Mono', normal !important;
-    font-size: 12px;
-}
-
-.categories li > a:hover {
-    color: #276590;
-    border-bottom: 1px #276590;
-}
-
-
-/* Change appearance of headers */
-h1, h2, h3, h4, h5 {
-    font-family: 'Oswald', sans-serif;
-    font-size: 1.3rem
-}
-
-/* Use specific font in the body of the text */
-html, body, p {
-    font-family: 'Roboto Condensed';
-    font-weight: lighter;
-}
-
-.posts-list .description p {
-    font-family: 'Roboto Condensed', serif !important;
-    font-weight: 200;
-    font-weight: lighter !important;
-    color: #32425D !important;
-}
-
-.posts-list .description h2 {
-    font-family: 'Oswald', sans-serif !important;
-}
-
-
-th, td { 
-    font-family: 'Roboto Mono';
-  }
-  
-
-d-appendix {
-  background-color: #f2f4f8;
-}
-
-code {
-  font-family: 'Fira+Code', !important;
-}
-</style>
 <!--/radix_placeholder_site_in_header-->
 
 
@@ -2107,6 +2409,8 @@ code {
 
 <div class="d-title">
 <h1>Create World Pixel Maps in R</h1>
+<!--radix_placeholder_categories-->
+<!--/radix_placeholder_categories-->
 <p><p>A walk-through of generating personalized pixel maps with R from scratch.</p></p>
 </div>
 
@@ -2122,9 +2426,11 @@ code {
 <h2 id="setup">Setup</h2>
 <p>The workflow here is very lightweight, and only requires <code>tidyverse</code> and <code>maps</code> to be loaded.</p>
 <div class="layout-chunk" data-layout="l-body">
-<pre class="r"><code>
-library(tidyverse)
-library(maps)</code></pre>
+<div class="sourceCode">
+<pre><code><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>maps</span><span class='op'>)</span>
+</code></pre>
+</div>
 </div>
 <h2 id="personal-coordinates">Personal coordinates</h2>
 <p>Next, as we are trying to make this map personal, you’ll need to supply a list of data points to map: places you’ve lived, places you’ve traveled to, and so on. I will leave you to your own devices here, whether you want to do some reverse geocoding, or look coordinates up one by one is up to you. The desired outcome here is a data frame containing latitude and longitude coordinates of the places you want to map.</p>
@@ -2149,17 +2455,19 @@ For smaller maps, consider a dot for each half of degree, in which case, round u
 If you consider a dot for each half a degree, then change the step from 1 to 0.5
 </aside>
 <div class="layout-chunk" data-layout="l-body">
-<pre class="r"><code>
-lat &lt;- tibble(lat = seq(-90, 90, by = 1))
-long &lt;- tibble(long = seq(-180, 180, by = 1))
-dots &lt;- lat %&gt;% 
-        merge(long, all = TRUE)
+<div class="sourceCode">
+<pre><code><span class='va'>lat</span> <span class='op'>&lt;-</span> <span class='fu'>tibble</span><span class='op'>(</span>lat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>90</span>, <span class='fl'>90</span>, by <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>long</span> <span class='op'>&lt;-</span> <span class='fu'>tibble</span><span class='op'>(</span>long <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>180</span>, <span class='fl'>180</span>, by <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>dots</span> <span class='op'>&lt;-</span> <span class='va'>lat</span> <span class='op'>%&gt;%</span> 
+        <span class='fu'><a href='https://rdrr.io/r/base/merge.html'>merge</a></span><span class='op'>(</span><span class='va'>long</span>, all <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-dots &lt;- dots %&gt;% 
-        mutate(country = map.where(&#39;world&#39;, long, lat),
-               lakes = map.where(&#39;lakes&#39;, long, lat)) %&gt;% 
-        filter(!is.na(country) &amp; is.na(lakes)) %&gt;% 
-        select(-lakes)</code></pre>
+<span class='va'>dots</span> <span class='op'>&lt;-</span> <span class='va'>dots</span> <span class='op'>%&gt;%</span> 
+        <span class='fu'>mutate</span><span class='op'>(</span>country <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/maps/man/map.where.html'>map.where</a></span><span class='op'>(</span><span class='st'>'world'</span>, <span class='va'>long</span>, <span class='va'>lat</span><span class='op'>)</span>,
+               lakes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/maps/man/map.where.html'>map.where</a></span><span class='op'>(</span><span class='st'>'lakes'</span>, <span class='va'>long</span>, <span class='va'>lat</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+        <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>country</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>lakes</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+        <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>lakes</span><span class='op'>)</span>
+</code></pre>
+</div>
 </div>
 <p>At this point, you are pretty much done with prep work. The next step - creating the visuals - will be highly dependent on your data, your needs, and your wants.</p>
 <h2 id="plotting">Plotting</h2>
@@ -2167,49 +2475,55 @@ dots &lt;- dots %&gt;%
 <h3 id="theme">Theme</h3>
 <p>I like defining a theme upfront. Mainly to remove all unnecessary chart features and define main colors.</p>
 <div class="layout-chunk" data-layout="l-body">
-<pre class="r"><code>
-color_bk &lt;- &quot;#212121&quot;
-theme &lt;- theme_void() +
-        theme(panel.background = element_rect(fill=color_bk),
-              plot.margin = unit(c(0, 0, 0, 0), &quot;cm&quot;))</code></pre>
+<div class="sourceCode">
+<pre><code><span class='va'>color_bk</span> <span class='op'>&lt;-</span> <span class='st'>"#212121"</span>
+<span class='va'>theme</span> <span class='op'>&lt;-</span> <span class='fu'>theme_void</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+        <span class='fu'>theme</span><span class='op'>(</span>panel.background <span class='op'>=</span> <span class='fu'>element_rect</span><span class='op'>(</span>fill<span class='op'>=</span><span class='va'>color_bk</span><span class='op'>)</span>,
+              plot.margin <span class='op'>=</span> <span class='fu'>unit</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>, <span class='st'>"cm"</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
 </div>
 <div class="layout-chunk" data-layout="l-body">
-<pre class="r"><code>
-plot &lt;- ggplot() +   
-        #base layer of map dots
-        geom_point(data = dots, 
-                   aes(x=long, y = lat), 
-                   col = &quot;grey45&quot;, 
-                   size = 0.7) + 
-        #plot all the places I&#39;ve been to
-        geom_point(data = locations, 
-                   aes(x=long_round, y=lat_round), 
-                   color=&quot;grey80&quot;, 
-                   size=0.8) + 
-        #plot all the places I lived in, using red
-        geom_point(data = locations %&gt;% 
-                     filter(flag == &#39;lived&#39;), 
-                   aes(x=long_round, y=lat_round), 
-                   color=&quot;red&quot;, 
-                   size=0.8) +
-        #an extra layer of halo around the places I lived in
-        geom_point(data = locations %&gt;% 
-                     filter(flag == &#39;lived&#39;), 
-                   aes(x=long_round, y=lat_round), 
-                   color=&quot;red&quot;, 
-                   size=6, 
-                   alpha = 0.4) +
-        #adding my theme
-        theme</code></pre>
+<div class="sourceCode">
+<pre><code><span class='va'>plot</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>   
+        <span class='co'>#base layer of map dots</span>
+        <span class='fu'>geom_point</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>dots</span>, 
+                   <span class='fu'>aes</span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>long</span>, y <span class='op'>=</span> <span class='va'>lat</span><span class='op'>)</span>, 
+                   col <span class='op'>=</span> <span class='st'>"grey45"</span>, 
+                   size <span class='op'>=</span> <span class='fl'>0.7</span><span class='op'>)</span> <span class='op'>+</span> 
+        <span class='co'>#plot all the places I've been to</span>
+        <span class='fu'>geom_point</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>locations</span>, 
+                   <span class='fu'>aes</span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>long_round</span>, y<span class='op'>=</span><span class='va'>lat_round</span><span class='op'>)</span>, 
+                   color<span class='op'>=</span><span class='st'>"grey80"</span>, 
+                   size<span class='op'>=</span><span class='fl'>0.8</span><span class='op'>)</span> <span class='op'>+</span> 
+        <span class='co'>#plot all the places I lived in, using red</span>
+        <span class='fu'>geom_point</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>locations</span> <span class='op'>%&gt;%</span> 
+                     <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>flag</span> <span class='op'>==</span> <span class='st'>'lived'</span><span class='op'>)</span>, 
+                   <span class='fu'>aes</span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>long_round</span>, y<span class='op'>=</span><span class='va'>lat_round</span><span class='op'>)</span>, 
+                   color<span class='op'>=</span><span class='st'>"red"</span>, 
+                   size<span class='op'>=</span><span class='fl'>0.8</span><span class='op'>)</span> <span class='op'>+</span>
+        <span class='co'>#an extra layer of halo around the places I lived in</span>
+        <span class='fu'>geom_point</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>locations</span> <span class='op'>%&gt;%</span> 
+                     <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>flag</span> <span class='op'>==</span> <span class='st'>'lived'</span><span class='op'>)</span>, 
+                   <span class='fu'>aes</span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>long_round</span>, y<span class='op'>=</span><span class='va'>lat_round</span><span class='op'>)</span>, 
+                   color<span class='op'>=</span><span class='st'>"red"</span>, 
+                   size<span class='op'>=</span><span class='fl'>6</span>, 
+                   alpha <span class='op'>=</span> <span class='fl'>0.4</span><span class='op'>)</span> <span class='op'>+</span>
+        <span class='co'>#adding my theme</span>
+        <span class='va'>theme</span>
+</code></pre>
+</div>
 </div>
 <div class="layout-chunk" data-layout="l-body-outset">
 <p><img src="pixel-maps_files/figure-html5/plot-1.png" width="1920" /></p>
 </div>
 <p>A large map like this is not particularly appealing. Zooming in or, say, removing Antarctica, could be a good approach.</p>
 <div class="layout-chunk" data-layout="l-body-outset">
-<pre class="r"><code>
-plot + scale_y_continuous(limits = c(10, 70), expand = c(0,0)) +
-        scale_x_continuous(limits = c(-150,90), expand = c(0,0))</code></pre>
+<div class="sourceCode">
+<pre><code><span class='va'>plot</span> <span class='op'>+</span> <span class='fu'>scale_y_continuous</span><span class='op'>(</span>limits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>70</span><span class='op'>)</span>, expand <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+        <span class='fu'>scale_x_continuous</span><span class='op'>(</span>limits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>150</span>,<span class='fl'>90</span><span class='op'>)</span>, expand <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
 <p><img src="pixel-maps_files/figure-html5/header-1.png" width="1536" /></p>
 </div>
 <h2 id="final-comments">Final comments</h2>
@@ -2222,6 +2536,7 @@ plot + scale_y_continuous(limits = c(10, 70), expand = c(0,0)) +
 <li>Pixel/Symbol Map Magic with ggplot: <a href="https://dadascience.design/post/r-pixel-symbol-map-magic-with-ggplot/" class="uri">https://dadascience.design/post/r-pixel-symbol-map-magic-with-ggplot/</a></li>
 <li><a href="https://github.com/lhehnke/tidytuesday" class="uri">https://github.com/lhehnke/tidytuesday</a></li>
 </ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
