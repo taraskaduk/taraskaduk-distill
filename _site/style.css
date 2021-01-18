@@ -1,0 +1,77 @@
+/*https://github.com/MilesMcBain/milesmcbain.com/blob/master/mmstyle.css*/
+
+/* Import fonts from Google's API */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
+
+
+.distill-site-nav {
+    font-family: 'Oswald', sans-serif !important;
+    background-color: #394B6A;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 200;
+}
+
+.distill-site-header {
+    font-family: 'Oswald', sans-serif !important;
+    background-color: #394B6A;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 200;
+}
+
+.distill-site-nav a:hover {
+    color: #C98686;
+}
+
+
+.distill-site-footer p {
+    font-family: 'Roboto Mono', normal !important;
+    font-size: 12px;
+}
+
+.categories li > a:hover {
+    color: #276590;
+    border-bottom: 1px #276590;
+}
+
+
+/* Change appearance of headers */
+h1, h2, h3, h4, h5 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.3rem
+}
+
+/* Use specific font in the body of the text */
+html, body, p {
+    font-family: 'Roboto Condensed';
+    font-weight: lighter;
+}
+
+.posts-list .description p {
+    font-family: 'Roboto Condensed', serif !important;
+    font-weight: 200;
+    font-weight: lighter !important;
+    color: #32425D !important;
+}
+
+.posts-list .description h2 {
+    font-family: 'Oswald', sans-serif !important;
+}
+
+
+th, td { 
+    font-family: 'Roboto Mono';
+  }
+  
+
+d-appendix {
+  background-color: #f2f4f8;
+}
+
+code {
+  font-family: 'Fira+Code', !important;
+}
