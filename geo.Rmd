@@ -3,6 +3,7 @@ title: "Geospatial posts and projects"
 site: distill::distill_website
 listing: 
   posts:
+    - 2021-01-18-print-street-maps
     - 2020-12-06-uber-movement-kyiv
     - 2019-11-11-excess-degree-days 
     - 2019-02-18-weather

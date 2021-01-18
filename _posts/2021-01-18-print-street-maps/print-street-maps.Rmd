@@ -6,12 +6,12 @@ description: |
 author:
   - name: Taras Kaduk
     url: https://taraskaduk.com
-date: 01-18-2021
+date: 2021-01-18
 output:
   distill::distill_article:
     self_contained: false
     toc: true
-    toc_depth: 2
+    toc_depth: 3
 bibliography: biblio.bib
 preview: preview.png
 ---
@@ -24,13 +24,9 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = FAL
 
 I had this post published originally on [2019-12-19 on my old version of the website, which ran on HUGO](https://github.com/taraskaduk/taraskaduk-hugo/blob/master/content/posts/2019-12-print-map/print_map.Rmd). As I was migrating the content from HUGO to Distill, I purged a lot of stuff that I deemed unnecessary, this post being among the purged ones. By that time, I found several really good online guides on how to print street maps more efficiently [@mccrain] [@burkhart]. However, a few people^[https://twitter.com/tamara_cheng/status/1312697647099244544] ^[https://twitter.com/heyitsmehugo/status/1341874708464197632] asked about my original post since then, and I felt that I owe it to the intrawebs to put it back on.
 
-<Aside>
 ```{r echo=FALSE}
 tweetrmd::tweet_embed("https://twitter.com/taraskaduk/status/1207680875472789505")
 ```
-</Aside>
-
----
 
 # Introduction
 
@@ -315,7 +311,7 @@ bbox2 <- st_bbox(circle2)
 bbox <- c(bbox1$xmin, bbox2$ymin, bbox1$xmax, bbox2$ymax)
 ```
 
-### Cutting the map
+## Cutting the map
 
 With borders determined (one of several ways above), we are ready to crop the map to its desired size. 
 If we've been cutting out a rectangular shape, we can use a `st_crop()` function to crop the shapefiles. Otherwise, we'll need `st_intersection()`
@@ -414,7 +410,7 @@ ggplot()+
 ```
 
 
-### Plotting
+## Plotting
 
 Now, to the plotting. This is where most of the tweaking is going to happen. Pick colors, opacity, width of the streets, order of layers etc etc. At some point, I wrote a double-layered `for` loop to iterate over several shades of gray and several versions of street widths, generating 64 different chart combinations. And that's just for 2 parameters alone with values very close to one another! The possibilities here are endless. Have fun customizing the look!
 
@@ -480,14 +476,14 @@ p <- ggplot() +
 And, of course, save the plot on hard drive to printing.
 
 ```{r ggsave}
-ggsave("map.png", plot=p, width = 297, height = 420, units = "mm", dpi = "retina")
+ggsave("kyiv_map.png", plot=p, width = 297, height = 420, units = "mm", dpi = "retina")
 ggsave("map.svg", plot=p)
 ```
 
 ```{r echo=FALSE, layout="l-page"}
-knitr::include_graphics("map.png")
+knitr::include_graphics("kyiv_map.png")
 ```
 
-This is pretty much it! From here, you can take the file into a program that works with vector images (e.g. Adobe Illustrator, Affinity, Inkspace, Affinity Designer et cetera) to further tweak it by hand before ordering prints.
+This is pretty much it! From here, you can take the file into a program that works with vector images (e.g. Adobe Illustrator, Inkspace, Affinity Designer et cetera) to further tweak it by hand before ordering prints.
 
 Enjoy!
