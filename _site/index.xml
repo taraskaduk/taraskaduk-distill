@@ -12,7 +12,16 @@
       <link>https://taraskaduk.com</link>
     </image>
     <generator>Distill</generator>
-    <lastBuildDate>Mon, 18 Jan 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 14 Mar 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Cities with Best (and Worst) Weather, 2021 edition</title>
+      <dc:creator>Taras Kaduk</dc:creator>
+      <link>https://taraskaduk.com/posts/2021-03-14-best-weather-2</link>
+      <description>An analysis of NCEI GSOD weather data with a subsequent ranking of World and U.S. cities in terms pleasant weather. Count of pleasant days and calculation of excess degree-days are used as two different approaches, returning similar (yet not identical) results.</description>
+      <guid>https://taraskaduk.com/posts/2021-03-14-best-weather-2</guid>
+      <pubDate>Sun, 14 Mar 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://taraskaduk.com/posts/2021-03-14-best-weather-2/figures/50_most_world_0_10_edd2.png" medium="image" type="image/png" width="2500" height="2300"/>
+    </item>
     <item>
       <title>Print Personalized Street Maps Using R</title>
       <dc:creator>Taras Kaduk</dc:creator>
