@@ -21,8 +21,6 @@ navbar:
       href: geo.html
     - text: "Talks"
       href: talks.html
-    - text: "Resume"
-      href: resume.html
     - icon: fa fa-rss
       href: index.xml
     - icon: fa fa-github
